@@ -11,10 +11,9 @@ import lombok.extern.log4j.Log4j2;
 public class ConsoleReader implements Callable<Void> {
 	@Override
 
-	public Void call() throws Exception {
-		
+	public Void call() throws Exception {		
 		log.info("Enter 'q' to stop RocWCT server...");
-		
+		log.info("Enter 'q' to stop RocWCT server");
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		while (true) {
 			try {
