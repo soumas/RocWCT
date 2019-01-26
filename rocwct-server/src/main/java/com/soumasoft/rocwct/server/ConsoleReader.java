@@ -13,7 +13,7 @@ public class ConsoleReader implements Callable<Void> {
 
 	public Void call() throws Exception {
 		
-		log.info("Enter 'quit' to stop RocWCT server");
+		log.info("Enter 'quit' to stop RocWCT server...");
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		while (true) {
