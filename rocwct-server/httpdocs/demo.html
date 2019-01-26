@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Roc WebComponents Toolkit Demo</title>	
+	<link rel="stylesheet" href="/rocwct.css" media="screen" >
+	<script type="module" src="/rocwct.js"></script>
+	<style type="text/css">
+		body {
+			overflow: hidden;
+		}
+		
+		iframe {
+			width:650px;
+			height:350px;
+			overflow: hidden;
+			border:none;
+		}
+		
+		table {
+			width:650px;
+		}
+		
+		td {
+			text-align: center;
+		}
+		
+		input[type=range] {
+			width: 100%;
+		}
+		.loc-throttle {
+  			-webkit-appearance: none;  /* Override default CSS styles */
+  			appearance: none;
+  			width: 100%; /* Full-width */
+  			height: 10px; /* Specified height */
+  			background: #d3d3d3; /* Grey background */
+		    outline: none; /* Remove outline */
+  			opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  			-webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  			transition: opacity .2s;
+  			border-radius: 20px;
+		}
+		
+		.loc-throttle::-webkit-slider-thumb {
+  			-webkit-appearance: none; /* Override default look */
+  			appearance: none;
+  			width: 40px; /* Set a specific slider handle width */
+  			height: 40px; /* Slider handle height */
+  			background: yellowgreen; /* Green background */
+  			cursor: pointer; /* Cursor on hover */
+  			border-radius: 20px;
+		}
+
+	</style>
+</head>
+<body>
+	<iframe src="http://rocrailserv.junet/" scrolling="no">
+	</iframe>
+	<table style="border:solid 1px #CCCCCC">
+		<tr>
+			<td><rocwct-power></rocwct-power></td>
+			<td><rocwct-loc-throttle loc-id="LOK2"></rocwct-loc-throttle></td>
+			<td><rocwct-loc-direction loc-id="LOK2"></rocwct-loc-direction></td>
+			<td><rocwct-loc-function loc-id="LOK2" fn="f0" icon="wb_sunny" label=" " ></td>
+		</tr>
+	</table>
+</body>
+</html>

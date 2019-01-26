@@ -1,86 +1,96 @@
 package com.soumasoft.rocwct.server;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.handshake.ServerHandshake;
-
-import com.soumasoft.rocwct.server.web.socket.RocWctWebSocketManager;
+import com.soumasoft.rocwct.server.config.ConsoleParam;
+import com.soumasoft.rocwct.server.config.Properties;
+import com.soumasoft.rocwct.server.console.ConsoleReaderTask;
+import com.soumasoft.rocwct.server.itc.AbstractRocWctTask;
+import com.soumasoft.rocwct.server.rcp.RocrailSocketTask;
+import com.soumasoft.rocwct.server.util.ShutdownHelper;
+import com.soumasoft.rocwct.server.web.http.RocWctHttpServerTask;
+import com.soumasoft.rocwct.server.web.socket.RocWctWebSocketTask;
 
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class Main {
 
-	public static volatile boolean running = true;
+	public static volatile List<AbstractRocWctTask> tasks = new ArrayList<>();
 
-	public static void main(String[] args) throws IOException, InterruptedException {
+	public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
 
-		if (!Config.getInstance().init()) {
-			log.fatal(
-					"Error on loading settings - not able to start RocWCT server. Please check previouse messages for further details.");
+		if (!Properties.init()) {
+			log.fatal("Error on loading settings - not able to start RocWCT server. Please check previouse messages for further details.");
 		}
 
-		if (System.getProperty("cmd") != null && "shutdown".equals(System.getProperty("cmd"))) {
-			WebSocketClient mWs;
-			try {
-				mWs = new WebSocketClient(new URI("ws://localhost:8053")) {
-					@Override
-					public void onMessage(String message) { }
-
-					@Override
-					public void onOpen(ServerHandshake handshake) { 
-						send("shutdown");
-						close();
-					}
-
-					@Override
-					public void onClose(int code, String reason, boolean remote) { }
-
-					@Override
-					public void onError(Exception ex) { }
-
-				}; 
-				mWs.connectBlocking();
-				while(mWs.isOpen()) {
-					Thread.sleep(1);					
-				}
-			} catch (URISyntaxException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			System.exit(0);
+		if (ConsoleParam.getBoolean(ConsoleParam.SHUTDOWN)) {
+			ShutdownHelper.shutdownOtherInstance();
 			return;
 		}
 
-		// log.debug(Config.getInstance().getRocrailHostname());
-		// log.warn(Config.getInstance().getRocrailHostname());
-		// log.info(Config.getInstance().getRocrailPort());
-		// log.fatal(Config.getInstance().getRocWctHostname());
-		// log.trace(Config.getInstance().getRocWctHttpPort());
-		// log.debug(Config.getInstance().getRocWctWebSocketPort());
-		RocWctWebSocketManager.getInstance().start(Config.getInstance().getRocWctHostname(),
-				Config.getInstance().getRocWctWebSocketPort());
+		printRuntimeInfo();
 
-		// ExecutorService executorService = Executors.newFixedThreadPool(2);
-		// List<Callable<?>> tasks = new ArrayList<>();
-		// tasks.add(new ConsoleReader());
-		// tasks.add(new MyTestRunnable());
-
-		// invokeAll wartet bis alle erledigt sind
-		// executorService.invokeAll(tasks);
-		// executorService.shutdownNow();
-
-		while (running) {
-
+		tasks.add(new RocWctWebSocketTask());
+		tasks.add(new RocWctHttpServerTask());
+		tasks.add(new RocrailSocketTask());
+		// start console watchter if not service runtime
+		if (!ConsoleParam.getBoolean(ConsoleParam.SERVICERUNTIME)) {
+			tasks.add(new ConsoleReaderTask());
 		}
+		
+		// execute all tasks
+		List<Future<?>> futures = new ArrayList<Future<?>>();
+		final ExecutorService executor = Executors.newFixedThreadPool(tasks.size());
+		
+		tasks.forEach(task -> {
+			futures.add(executor.submit(task));
+		});
+		
+		// wait for all futures
+		for(Future<?> f : futures) {
+			f.get();
+		}
+		
+		executor.shutdownNow();
 
-		RocWctWebSocketManager.getInstance().stop();
+		log.info("RocWCT server stopped");
 
-		log.info("RocWCT server stopped gracefully");
+	}
+	
+	private static void printRuntimeInfo() {
 
+		StringBuilder sb = new StringBuilder(System.getProperty("line.separator"));
+		sb.append("   _____         __          _______ _______ " + System.getProperty("line.separator"));
+		sb.append("  |  __ \\        \\ \\        / / ____|__   __|" + System.getProperty("line.separator"));
+		sb.append("  | |__) |___   __\\ \\  /\\  / / |       | |   " + System.getProperty("line.separator"));
+		sb.append("  |  _   / _ \\ / __\\ \\/  \\/ /| |       | |   " + System.getProperty("line.separator"));
+		sb.append("  | | \\ \\ (_) | (__ \\  /\\  / | |____   | |   " + System.getProperty("line.separator"));
+		sb.append("  |_|  \\_\\___/ \\___| \\/  \\/   \\_____|  |_|   " + System.getProperty("line.separator"));
+		sb.append("---------------------------------------------------" + System.getProperty("line.separator"));
+		sb.append("  Copyright (c) 2019 Thomas Juen, soumasoft.com" + System.getProperty("line.separator"));
+		sb.append("  RocWCT server is provided under the MIT license" + System.getProperty("line.separator"));
+		sb.append("---------------------------------------------------" + System.getProperty("line.separator"));
+		sb.append("  Version: " + Main.class.getPackage().getImplementationVersion()
+				+ System.getProperty("line.separator"));
+		sb.append("  Console Params: " + ConsoleParam.getSummary() + System.getProperty("line.separator"));
+		sb.append("  Process ID: " + Thread.currentThread().getId() + System.getProperty("line.separator"));
+		sb.append("---------------------------------------------------");
+		log.info(sb.toString());
+
+		// some additional debug infos
+		sb = new StringBuilder(System.getProperty("line.separator"));
+		sb.append("  Execution location: " + Paths.get("").toAbsolutePath().toString() + System.getProperty("line.separator"));
+		sb.append("  System properties: " + System.getProperties().toString() + System.getProperty("line.separator"));
+		sb.append("---------------------------------------------------");
+		log.debug(sb.toString());
 	}
 
 }
