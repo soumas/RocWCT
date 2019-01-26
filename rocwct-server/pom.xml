@@ -1,10 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.soumasoft</groupId>
-  <artifactId>rocwct-server</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>RocWCT</name>
-  
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.soumasoft</groupId>
+	<artifactId>rocwct-server</artifactId>
+	<version>1.0.0</version>
+	<name>RocWCT</name>
+	<packaging>jar</packaging>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -46,6 +49,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>rocwct-server</finalName>
 		<plugins>
 			<!-- Maven Compiler Plugin -->
 			<plugin>
@@ -69,6 +73,8 @@
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
 							<mainClass>com.soumasoft.rocwct.server.Main</mainClass>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
 						</manifest>
 					</archive>
 				</configuration>
@@ -95,5 +101,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 </project>
