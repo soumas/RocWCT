@@ -42,7 +42,7 @@ public class Main {
 					@Override
 					public void onError(Exception ex) { }
 
-				};
+				}; 
 				mWs.connectBlocking();
 				while(mWs.isOpen()) {
 					Thread.sleep(1);					
