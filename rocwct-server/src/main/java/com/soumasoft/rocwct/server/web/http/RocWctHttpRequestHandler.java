@@ -102,7 +102,7 @@ public class RocWctHttpRequestHandler implements Runnable{
 					if(staticFileDataCache.containsKey(VIRTUAL_COMPONENTS_FILLIST_PATH)) {
 						data = staticFileDataCache.get(VIRTUAL_COMPONENTS_FILLIST_PATH);
 					} else {
-						String pathToWebComponentJsFiles = Properties.getRocWctHttpDocumentsRoot() + "components/";
+						String pathToWebComponentJsFiles = Properties.getRocWctHttpDocumentsRoot() + "/js/webcomponents/";
 						String[] fileNames = new File(pathToWebComponentJsFiles).list(new FilenameFilter() {
 							@Override
 							public boolean accept(File dir, String name) {

@@ -13,6 +13,14 @@ import com.soumasoft.rocwct.server.rcp.RocrailSocketTask;
 import com.soumasoft.rocwct.server.web.http.RocWctHttpServerTask;
 import com.soumasoft.rocwct.server.web.socket.RocWctWebSocketTask;
 
+import lombok.extern.log4j.Log4j2;
+
+/**
+ * The Taskmanager starts, holds and provides all RocWCT Tasks.
+ * 
+ * @author Thomas Juen, SoumaSoft
+ */
+@Log4j2
 public class Taskmanager {
 
 	public static volatile List<AbstractRocWctTask> tasks = new ArrayList<>();
@@ -40,6 +48,8 @@ public class Taskmanager {
 		}
 
 		executor.shutdownNow();
+		
+		log.info("RocWCT server stopped");
 
 	}
 	

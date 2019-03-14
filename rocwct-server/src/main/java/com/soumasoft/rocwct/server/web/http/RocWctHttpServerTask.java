@@ -54,7 +54,7 @@ public class RocWctHttpServerTask extends AbstractRocWctTask {
 				
 			} catch (IOException e) {
 				if(e instanceof SocketException && shutdownInProgress) {
-					log.info("HttpSocket is closed now");
+					log.debug("HttpSocket is closed now");
 				} else {
 					throw new RuntimeException(e);
 				}

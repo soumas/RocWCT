@@ -17,7 +17,9 @@ public enum ConsoleParam {
 	/** in this mode, the program just sends a shutdown-command to the running RocWCT server and exists immediately (<code>ShutdownHelper</code>) */
 	SHUTDOWN("shutdown", "false"),
 	/** allows to specify an alternative path to the <see>Properties</see> File */
-	PROPERTYFILEPATH("propertyfilepath","./rocwct.properties");
+	PROPERTYFILEPATH("propertyfilepath","./rocwct.properties"),
+	/** start RocWCT in install-mode (= create files & dierctories and shutdown) */
+	INSTALL("install","false");
 	
 	@Getter
 	@Setter

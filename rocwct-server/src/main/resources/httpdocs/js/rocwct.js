@@ -3,7 +3,7 @@ window.onload = function() {
         log("loading jQuery from wcp libs");
         var elem = document.createElement('script');
         elem.type = "text/javascript";
-        elem.src = "/libs/jquery-3.3.1.min.js";
+        elem.src = "/js/jquery-3.3.1.min.js";
         elem.onload = init;
         document.head.appendChild(elem);
     } else {
@@ -48,7 +48,7 @@ function loadWebComponents() {
             log("loading web component file '" + val + "'");
             var js = document.createElement('script');
             js.type = "module"; 
-            js.src = "components/"+val;
+            js.src = "/js/webcomponents/"+val;
             document.head.appendChild(js);
         });
     });
