@@ -1,4 +1,4 @@
-window.onload = function() {    
+window.onload = function() {
     if (!window.jQuery) {
         log("loading jQuery from wcp libs");
         var elem = document.createElement('script');
@@ -22,12 +22,12 @@ function init() {
 function initWebSocket() {
     socket = new WebSocket("ws://localhost:8053");
     socket.onopen = function() {
-        log("websocket connection is open");                 
-    };    
-    socket.onmessage = function (evt) { 
+        log("websocket connection is open");
+    };
+    socket.onmessage = function (evt) {
         log("Message: " + evt.data);
         var data = JSON.parse(evt.data);
-        //log("Received Message: " + JSON.stringify(data, null, 2)); 
+        //log("Received Message: " + JSON.stringify(data, null, 2));
         $.each(subscribtions, function(k, subscribtion) {
             if(data.hasOwnProperty(subscribtion.event)) {
                 if(!subscribtion.id || subscribtion.id == data[subscribtion.event].id) {
@@ -44,10 +44,10 @@ function initWebSocket() {
 function loadWebComponents() {
     // fetch list of all existing web components
     $.getJSON( "dynamic-rocrail-wcp-components.json", function( data ) {
-        $.each( data, function( key, val ) {    
+        $.each( data, function( key, val ) {
             log("loading web component file '" + val + "'");
             var js = document.createElement('script');
-            js.type = "module"; 
+            js.type = "module";
             js.src = "/js/webcomponents/"+val;
             document.head.appendChild(js);
         });
@@ -55,7 +55,7 @@ function loadWebComponents() {
 }
 
 export function log(msg) {
-    console.log("rocrail-wcp: " + msg);
+    console.log("rocwct.js: " + msg); 
 }
 
 export function subscribe(component, event, id) {
@@ -64,7 +64,7 @@ export function subscribe(component, event, id) {
     subscribtion.event = event;
     subscribtion.id = id;
     subscribtions.push(subscribtion);
-    
+
     if(component.onSubscribed) {
         component.onSubscribed();
     }
