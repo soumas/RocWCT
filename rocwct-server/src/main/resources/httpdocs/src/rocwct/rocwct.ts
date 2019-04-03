@@ -7,7 +7,7 @@ var subscribtions = [];
 
 function init() {
     initWebSocket();
-    loadWebComponents();
+    //loadWebComponents();
 }
 
 function initWebSocket() {
@@ -20,12 +20,12 @@ function initWebSocket() {
         var data = JSON.parse(evt.data);
         subscribtions.forEach(subscribtion => {
             if(data.hasOwnProperty(subscribtion.event)) {
-                if(!subscribtion.id || subscribtion.id == data[subscribtion.event].id) {
-                    subscribtion.component.onSocketMessage(data);
+                if(!subscribtion.id || subscribtion.id === data[subscribtion.event].id) {
+                    subscribtion.component.onSocketMessage(subscribtion.event, data);
                 }
             }
-        });
-    };
+        }); 
+    }; 
     socket.onclose = function() {
         log("websocket connection is closed");
     };
@@ -35,26 +35,29 @@ function loadWebComponents() {
     // fetch list of all existing web components
     fetch('dynamic-rocrail-wcp-components.json')
     .then(response => {
-        return response.json;
+        return response.json();
     })
     .then(data => {
-        log('sfsfsfsfsf');
-        log(data);
-        //data.forEach(val => {
-        //    log("loading web component file '" + val + "'");
-        //    var js = document.createElement('script');
-        //    js.type = "module";
-        //    js.src = "/js/webcomponents/"+val;
-        //    document.head.appendChild(js);
-        // });
+        data.forEach((val: string) => {
+            log("fetching web component '" + val + "'");
+            var js = document.createElement('script');
+            js.type = "module";
+            js.src = "/js/webcomponents/"+val;
+            document.head.appendChild(js);
+         });
     });
 }
 
-export function log(msg) {
-    console.log("rocwct.js: " + msg); 
+function log(msg) {
+    console.log("rocwct: " + msg); 
 }
 
-export function subscribe(component, event, id) {
+export function unsubscribe(component) {
+    // TODO
+}
+
+export function subscribe(component, event : string, id? : string) {
+
     var subscribtion : any = {};
     subscribtion.component = component;
     subscribtion.event = event;
@@ -64,13 +67,6 @@ export function subscribe(component, event, id) {
     if(component.onSubscribed) {
         component.onSubscribed();
     }
-
-}
-
-export function unsubscribe(component) {
-    subscribtions.forEach(itm => {
-        // TODO
-    });
 }
 
 export async function send(message) {

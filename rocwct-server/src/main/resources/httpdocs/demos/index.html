@@ -2,11 +2,18 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>Test Component</title>	
-	<link rel="stylesheet" href="/css/rocwct.css" media="screen" >
-	<script type="module" src="/js/rocwct.js"></script>
+	<title>Test Component</title>
+	<script src="/js/rocwct-bundle.js" type="module"></script>
+	<style type="text/css">
+		.rwc-control {
+			border: solid 20px red !important;
+		}
+	</style>
 </head>
 <body>
+		<loco-function></loco-function><br/>
+		<loco-direction></loco-direction><br/>
+		<rcp-composer></rcp-composer>
 	<table border="1">
 		<tr>
 			<td>Component</td>
@@ -48,7 +55,11 @@
 		<tr>
 			<td>rocwct-loc-direction</td>
 			<td></td>
-			<td>LOK2: <rocwct-loc-direction loc-id="LOK2"></rocwct-loc-direction></td>
+			<td>LOK2: 
+				<rocwct-loc-direction loc-id="LOK2">
+					<h2 slot="lbl">XXXXXXXXXXXXUF</h2>
+				</rocwct-loc-direction><br/>
+				NS2418: <rocwct-loc-direction loc-id="NS2418"></rocwct-loc-direction><br/></td>
 		</tr>
 	</table>
 

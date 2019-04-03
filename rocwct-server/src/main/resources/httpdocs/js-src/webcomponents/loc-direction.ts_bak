@@ -1,0 +1,91 @@
+import * as rocwct from '../rocwct.js';
+import {html, render} from '../../js/libs/node_modules/lit-html/lit-html';
+import {RocrailEventConstants, RocrailEventPlan, RocrailEventLc, Lc } from '../interfaces/rocrail-events.js';
+
+
+const template = document.createElement('template');
+template.innerHTML = `<button><slot name="lbl">default</slot></button>`;
+
+export class LocDirection extends HTMLElement {
+    
+	static readonly cn : string = 'rocwct-loc-direction';
+    static readonly template = (icon : string) => html`
+    <style>
+        button {
+            background-color: yellow;
+        }
+    </style>
+    <button class="rwc-control rwc-button loc-direction active">
+    <slot name="lbl"></slot>
+        <div class="icon">        
+			<i class="material-icons">${icon}</i>
+		</div>
+	</button>
+    `;
+    
+    controlcode: string; 
+    slavecode: string;
+    iconRight: string;
+    iconLeft: string;
+    locID: string; 
+    data: Lc;
+ 
+	constructor() {
+        super();
+        
+        this.attachShadow({mode: 'open'});
+        this.shadowRoot.appendChild(template.content.cloneNode(true));
+	}
+
+	connectedCallback() {		
+
+        this.controlcode = (this.getAttribute("controlcode")) ? this.getAttribute("controlcode") : '';
+        this.slavecode = (this.getAttribute("slavecode")) ? this.getAttribute("slavecode") : '';
+        this.iconRight = (this.getAttribute("icon-right")) ? this.getAttribute("icon-right") : 'fast_forward';
+        this.iconLeft = (this.getAttribute("icon-left")) ? this.getAttribute("icon-left") : 'fast_rewind';
+        this.locID = this.getAttribute("loc-id");
+
+        if(!this.locID) {
+            this.innerHTML=`<div style="color:red;font-family:courier;"><b>MISSING ATTRIBUTE for loc-direction!</b><br/>Attribut loc-id is required for the component!</div>`;
+            return;
+        } 
+
+        this.addEventListener('click', this.onClick);
+
+        rocwct.subscribe(this, RocrailEventConstants.LC_EVENTID, this.locID);
+        rocwct.subscribe(this, RocrailEventConstants.PLAN_EVENTID);
+    }
+    
+
+    disconnectedCallback() {
+        this.removeEventListener('click', this.onClick);
+        rocwct.unsubscribe(this);
+    }
+
+    onClick() {
+        var toggle = (this.data.dir === true) ? "false" : "true";
+        rocwct.send("<lc id=\""+this.locID+"\" dir=\""+toggle+"\" controlcode=\""+this.controlcode+"\" slavecode=\""+this.slavecode+"\" />");
+    }
+
+    onSubscribed() {
+        rocwct.send("<model cmd=\"plan\" />");
+    }
+
+    onSocketMessage(event : string, msg : RocrailEventLc | RocrailEventPlan) {
+
+        if(event === RocrailEventConstants.LC_EVENTID) { 
+            this.data = (msg as RocrailEventLc).lc;
+        } else if(event === RocrailEventConstants.PLAN_EVENTID) { 
+             (msg as RocrailEventPlan).plan.lclist.lc.forEach((loc : Lc) => {
+                 if(loc.id === this.locID) {
+                    this.data = loc;
+                 }
+             });
+        }
+
+        var icon = (this.data.dir === true) ? this.iconRight : this.iconLeft;			
+        //render(LocDirection.template(icon), this);
+    }
+
+}
+customElements.define(LocDirection.cn, LocDirection);

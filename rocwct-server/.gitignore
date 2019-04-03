@@ -1,2 +1,4 @@
 /target/
-/src/main/resources/httpdocs/js/libs/node_modules/
+/src/main/resources/httpdocs/src/node_modules/
+/src/main/resources/httpdocs/src/tsc_out/
+/src/main/resources/httpdocs/src/dist/
