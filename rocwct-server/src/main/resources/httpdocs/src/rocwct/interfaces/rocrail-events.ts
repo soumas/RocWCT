@@ -700,10 +700,3 @@ export interface RocrailEventException {
 export interface RocrailEventState {
     state: State;
 }
-
-export class RocrailEventConstants {
-    public static readonly PLAN_EVENTID : string = 'plan';
-    public static readonly LC_EVENTID : string = 'lc';
-    public static readonly AUTO_EVENTID : string = 'auto';
-    public static readonly CLOCK_EVENTID : string = 'clock';
-}
