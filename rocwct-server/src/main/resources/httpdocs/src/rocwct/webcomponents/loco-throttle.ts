@@ -5,6 +5,6 @@ export class LocoThrottle extends LitElement {
   @property() name = 'LocoThrottle';
 
   render() {
-    return html`<p>Hello ${this.name}!</p>`;
-  }  
+    return html`<p>Hello! ${this.name}!</p>`;
+  } 
 }
