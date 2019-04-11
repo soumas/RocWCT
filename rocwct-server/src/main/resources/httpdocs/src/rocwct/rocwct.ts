@@ -1,4 +1,4 @@
-import { ServerEventSubscription } from './base/server-event-subscription'
+import { ServerEventSubscription, EServerEvent } from './base/rocwct-lib'
 
 window.onload = function() {
     init();
@@ -20,9 +20,10 @@ function initWebSocket() {
         log("Message: " + evt.data);
         var data = JSON.parse(evt.data);
         subscribtions.forEach(subscribtion => {
-            if(data.hasOwnProperty(subscribtion.event)) {
-                if(!subscribtion.id || subscribtion.id === data[subscribtion.event].id) {
-                    subscribtion.onServerEvent(subscribtion.event, data);
+            let eventName : String = EServerEvent[subscribtion.event];
+            if(data.hasOwnProperty(eventName)) {
+                if(!subscribtion.id || subscribtion.id === eval('data[eventName]').id) {
+                    subscribtion.onServerEvent(data, subscribtion.event);
                 }
             }
         }); 
@@ -32,7 +33,7 @@ function initWebSocket() {
     };
 }
 
-function log(msg) {
+function log(msg : String) {
     console.log("rocwct: " + msg); 
 }
 
@@ -41,12 +42,7 @@ export function unsubscribe(component) {
 }
 
 export function subscribe(subscribtion : ServerEventSubscription) {
-
     subscribtions.push(subscribtion);
-
-    if(subscribtion.onSubscribed) {
-        subscribtion.onSubscribed();
-    }
 }
 
 export async function send(message : string) {
