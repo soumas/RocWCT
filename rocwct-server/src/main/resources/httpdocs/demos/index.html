@@ -4,21 +4,12 @@
 	<meta charset="utf-8" />
 	<title>Test Component</title>
 	<script src="/js/rocwct-bundle.js" type="module"></script>
-	<style type="text/css">
-		.rwc-control {
-			border: solid 20px red !important;
-		}
-	</style>
 </head>
 <body>
-		<loco-direction loco-id="E03"></loco-direction><br/>
-		<loco-direction loco-id="LOK2"></loco-direction><br/>
-		<loco-direction loco-id="V200"></loco-direction><br/>
 
-		<loco-function></loco-function><br/>
 		<loco-throttle></loco-throttle><br/>
-		<rcp-tester></rcp-tester><br>
-
+		<br>
+<br/><br/>
 	<table border="1">
 		<tr>
 			<td>Component</td>
@@ -26,29 +17,44 @@
 			<td>Demo</td>
 		</tr>
 		<tr>
-			<td>rocwct-power</td>
-			<td>
-				controlcode (optional)<br/>
-				slavecode (optional)<br/>
-			</td>
-			<td><rocwct-power></rocwct-power></td>
-		</tr>
-		<tr>
-			<td>rocwct-loc-function</td>
+			<td>rcp-tester</td>
 			<td></td>
 			<td>
-				<rocwct-loc-function loc-id="LOK2" fn="f0" icon="wb_sunny" label=" " ></rocwct-loc-function>
-				<rocwct-loc-function loc-id="LOK2" fn="f1" ></rocwct-loc-function>
-				<rocwct-loc-function loc-id="LOK2" fn="f2" ></rocwct-loc-function>
-				<rocwct-loc-function loc-id="LOK2" fn="f3" ></rocwct-loc-function>
-				<rocwct-loc-function loc-id="LOK2" fn="f4" ></rocwct-loc-function>
+				<rcp-tester></rcp-tester>
 			</td>
 		</tr>
 		<tr>
-			<td>rocwct-command-tester</td>
+				<td>power-switch</td>
+				<td></td>
+				<td>
+					<power-switch></power-switch>
+				</td>
+		</tr>
+		<tr>
+				<td>auto-switch</td>
+				<td></td>
+				<td>
+					<auto-switch></auto-switch>
+				</td>
+		</tr>		
+		<tr>
+			<td>loco-direction</td>
+			<td>
+				loco-id (pflicht)<br/>
+				direction (optional)<br/>
+			</td>
+			<td>
+				Richtung vorwärts: <loco-direction loco-id="E03" direction="forward"></loco-direction><br/>
+				Richtung toggle: <loco-direction loco-id="LOK2"></loco-direction><br/>
+				Richtung rückwärts: <loco-direction loco-id="V200" direction="backward"></loco-direction><br/>
+			</td>
+		</tr>
+		<tr>
+			<td>loco-function</td>
 			<td></td>
 			<td>
-				<rocwct-command-tester></rocwct-command-tester>
+				<loco-function loco-id="LOK2" fn="f1"></loco-function><br/>
+				<loco-function loco-id="LOK2" fn="f2"></loco-function><br/>
 			</td>
 		</tr>
 		<tr>
@@ -56,15 +62,6 @@
 			<td>
 			</td>
 			<td><rocwct-loc-throttle loc-id="LOK2"></rocwct-loc-throttle></td>
-		</tr>
-		<tr>
-			<td>rocwct-loc-direction</td>
-			<td></td>
-			<td>LOK2: 
-				<rocwct-loc-direction loc-id="LOK2">
-					<h2 slot="lbl">XXXXXXXXXXXXUF</h2>
-				</rocwct-loc-direction><br/>
-				NS2418: <rocwct-loc-direction loc-id="NS2418"></rocwct-loc-direction><br/></td>
 		</tr>
 	</table>
 

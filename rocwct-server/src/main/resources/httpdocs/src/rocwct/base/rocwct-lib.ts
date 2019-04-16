@@ -1,13 +1,27 @@
-import { LitElement } from 'lit-element';
+import { LitElement, css } from 'lit-element';
+import * as rocwct from '../rocwct';
 
 /***********************************************************/
 /**************** RocWct Lit Elment ************************/
 /***********************************************************/
 export abstract class RocWctLitElement extends LitElement {
 
+    // static get styles() {
+    //     return [ css`:host { display: block; }`];
+    // }
+
     constructor() {
         super();
     }
+
+    registerServerEvent(event : EServerEvent, id? : string, serverEventHandler? : IServerEventCallback) {
+        let evnt : ServerEventSubscription = new ServerEventSubscription();
+        evnt.element = this;
+        evnt.event = event;
+        evnt.id = id;
+        evnt.onServerEvent = serverEventHandler;
+        rocwct.subscribe(evnt);
+      }
 }
 
 /***********************************************************/
@@ -17,16 +31,11 @@ export class ServerEventSubscription {
     element : RocWctLitElement;
     event : EServerEvent;
     id? : string;
-    onSubscribed? : ISubscribedCallback;
     onServerEvent : IServerEventCallback;
 }
 
 export enum EServerEvent {
-    plan, lc, auto, clock
-}
-
-export interface ISubscribedCallback  {
-    () : void;
+    plan, lc, auto, clock, fn, state
 }
 
 export interface IServerEventCallback  {
@@ -453,6 +462,13 @@ export interface Accessoryctrl {
     freeblocks: string;
 }
 
+export interface Auto {
+    controlcode: string;
+    server: string;
+    slavecode: string;
+    cmd: string;
+}
+
 export interface Sw {
     addr1: number;
     testing: boolean;
@@ -711,9 +727,87 @@ export interface State {
     load: number;
     volt: number;
 }
+export interface Fn {
+    blockenterid: string;
+    server: string;
+    blockenterside: boolean;
+    destblockid: string;
+    fn: boolean;
+    V_realkmh: number;
+    dir: boolean;
+    manual: boolean;
+    mtime: number;
+    resumeauto: boolean;
+    placing: boolean;
+    consist: string;
+    mode: string;
+    blockid: string;
+    scheduleinithour: number;
+    mint: number;
+    len: number;
+    rdate: number;
+    V: number;
+    id: string;
+    addr: number;
+    trainlen: number;
+    trainweight: number;
+    train: string;
+    image: string;
+    secaddr: number;
+    modereason: string;
+    runtime: number;
+    active: boolean;
+    weight: number;
+    imagenr: number;
+    waittime: number;
+    scidx: number;
+    pause: boolean;
+    energypercentage: number;
+    throttleid: string;
+    fifotop: boolean;
+    tourid: string;
+    lookupschedule: boolean;
+    scheduleid: string;
+    f30: boolean;
+    f10: boolean;
+    f32: boolean;
+    f31: boolean;
+    f12: boolean;
+    f11: boolean;
+    f14: boolean;
+    f13: boolean;
+    f0: boolean;
+        f16: boolean;
+        f1: boolean;
+        f15: boolean;
+        f2: boolean;
+        f18: boolean;
+        f3: boolean;
+        f17: boolean;
+        f4: boolean;
+        f5: boolean;
+        f19: boolean;
+        f6: boolean;
+        f7: boolean;
+        f8: boolean;
+        f9: boolean;
+        group: number;
+        f21: boolean;
+        f20: boolean;
+        f23: boolean;
+        f22: boolean;
+        f25: boolean;
+        f24: boolean;
+        f27: boolean;
+        f26: boolean;
+        f29: boolean;
+        f28: boolean;
+        fncnt: number;
+        fnchanged: number;
+}
 
-export interface Auto {
-    cmd: string;
+export interface RocrailEventFn {
+    fn: Fn;
 }
 
 export interface RocrailEventPlan {

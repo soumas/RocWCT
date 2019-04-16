@@ -17,7 +17,7 @@ function initWebSocket() {
         log("websocket connection is open");
     };
     socket.onmessage = function (evt) {
-        log("Message: " + evt.data);
+        log("<<<< IN: " + evt.data);
         var data = JSON.parse(evt.data);
         subscribtions.forEach(subscribtion => {
             let eventName : String = EServerEvent[subscribtion.event];
@@ -51,5 +51,6 @@ export async function send(message : string) {
         await new Promise(resolve => setTimeout(resolve, 100));
     }
     // send message
+    log(">>>> OUT: " + message);
     socket.send(message);
 }
