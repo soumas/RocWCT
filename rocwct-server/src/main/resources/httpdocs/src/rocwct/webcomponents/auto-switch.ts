@@ -18,6 +18,7 @@ export class AutoSwitch extends RocWctLitElement {
   connectedCallback() {
     super.connectedCallback();
     this.registerServerEvent(EServerEvent.auto, null, res => this.onServerEvent(res));
+    this.sendInitCommand();
   }
     
   render() {
@@ -25,6 +26,10 @@ export class AutoSwitch extends RocWctLitElement {
       ? html`<button class="${this.on === true ? "on" : "off"}" @click="${this.handleClick}"><slot name="btnContent">Auto </slot></button>`
       : html``
     }`;
+  }
+
+  sendInitCommand() {    
+    rocwct.send('<sys cmd="getstate"/>');
   }
 
   handleClick() {  

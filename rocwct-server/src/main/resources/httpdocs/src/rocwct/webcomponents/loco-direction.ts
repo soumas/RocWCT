@@ -22,6 +22,7 @@ export class LocoDirection extends RocWctLitElement {
     this.registerServerEvent(EServerEvent.lc, this.locoId, res => this.onServerEvent(res));
     // trigger server-event by sending an empty dir-command
     this.sendDirCmd();    
+    this.sendInitCommand();
   }
     
   render() {
@@ -35,24 +36,25 @@ export class LocoDirection extends RocWctLitElement {
     this.sendDirCmd();
   }
 
+  sendInitCommand() {    
+    // empty lc-command triggers server event with current state of loco
+    rocwct.send(`<lc id="${this.locoId}"  />`); 
+  }  
+
   onServerEvent(event:RocrailEventLc) {
     this.forward = event.lc.dir;
   }
 
   sendDirCmd() : void {
-    let dirTerm : string;    
-    if(this.forward != null) {
-      if(this.direction === 'forward') {
-        dirTerm = `dir="true"`;
-      } else if(this.direction === 'backward') {
-        dirTerm = `dir="false"`;
-      } else {
-        dirTerm = `dir="${this.forward === true ? "false" : "true"}"`;
-      }
+    let dirval : string = '';
+    if(this.direction === 'forward') {
+      dirval = 'true';
+    } else if(this.direction === 'backward') {
+      dirval = 'false';
     } else {
-      dirTerm = '';
+      dirval = this.forward === true ? "false" : "true";
     }
-    rocwct.send(`<lc id="${this.locoId}" ${dirTerm}  />`); 
+    rocwct.send(`<lc id="${this.locoId}" dir="${dirval}" />`); 
   }
 
 }

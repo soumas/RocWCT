@@ -1,5 +1,5 @@
 import { html, customElement, css, property } from 'lit-element';
-import { RocWctLitElement, EServerEvent, RocrailEventFn }  from '../base/rocwct-lib';
+import { RocWctLitElement, EServerEvent, RocrailEventFn, RocrailEventPlan }  from '../base/rocwct-lib';
 import * as rocwct from '../rocwct';
 
 @customElement('loco-function')
@@ -14,12 +14,14 @@ export class LocoFunction extends RocWctLitElement {
   }
 
   @property({ type : Boolean })  on = null;
-  @property({ type : String, attribute : "loco-id" }) locoId = null;
-  @property({ type : String, attribute : "fn" }) fn = null;
+  @property({ type : String, attribute : "loco-id" }) locoId = "";
+  @property({ type : String, attribute : "fn" }) fn = "";
 
   connectedCallback() {
     super.connectedCallback();
     this.registerServerEvent(EServerEvent.fn, this.locoId, res => this.onServerEvent(res));
+    this.registerServerEvent(EServerEvent.plan, null, res => this.onInitialServerEvent(res));
+    this.sendInitCommand();
   }
     
   render() {
@@ -33,6 +35,27 @@ export class LocoFunction extends RocWctLitElement {
     this.sendCmd();
   }
 
+  sendInitCommand() {    
+    rocwct.send(`<model cmd="plan" />`); 
+  }  
+
+  onInitialServerEvent(event : RocrailEventPlan) {
+    // the initial model plan contains the property 'fx" for each loco.
+    // the value of this property represents one bit for each function.
+    // https://forum.rocrail.net/viewtopic.php?f=11&t=16987&hilit=rcp
+    event.plan.lclist.lc.forEach(loco => {
+      if(loco.id === this.locoId) {
+        let binRep : string = loco.fx.toString(2);
+        let myPos : number =  this.extractFunctionNumber();
+        let funcOn : boolean = false;
+        if(myPos <= binRep.length) {
+          funcOn = binRep.substr(binRep.length-myPos, 1) === "1";
+        }        
+        this.on = funcOn;
+      }
+    });
+  }
+
   onServerEvent(event : RocrailEventFn) {
     if(!(event.fn as any).hasOwnProperty(this.fn)) {
       return;
@@ -41,8 +64,14 @@ export class LocoFunction extends RocWctLitElement {
   }
 
   sendCmd() : void {
-    let cmd : string = `<fn id="${this.locoId}" ${this.fn}="${this.on === true ? "false" : "true"}"  />`;
+    //let cmd : string = `<fn fnchanged="${this.extractFunctionNumber()}" fnchangedstate="true" id="${this.locoId}" group="1" fncnt="4" addr="7" shift="false" f4="true" throttleid="rv12140" controlcode="" slavecode=""/>`;
+    //let cmd : string = `<fn id="${this.locoId}" ${this.fn}="${this.on === true ? "false" : "true"}"  />`;
+    let group : number = 1; //(this.extractFunctionNumber()-1)/4+1; TODO
+    let cmd : string = `<fn controlcode="" slavecode="" id="${this.locoId}" throttleid="" fnchanged="${this.extractFunctionNumber()}" group="${group}" f${this.extractFunctionNumber()}="${this.on === true ? "false" : "true"}" />`;
     rocwct.send(cmd); 
   }
 
+  extractFunctionNumber() : number {
+    return parseInt(this.fn.substr(1));
+  }
 }
