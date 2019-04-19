@@ -1,5 +1,5 @@
 import { html, customElement, css, property } from 'lit-element';
-import { RocWctLitElement, EServerEvent, RocrailEventFn, RocrailEventPlan }  from '../base/rocwct-lib';
+import { RocWctLitElement, EServerEvent, RocrailEventFn, RocrailEventPlan, Fundef }  from '../base/rocwct-lib';
 import * as rocwct from '../rocwct';
 
 @customElement('loco-function')
@@ -7,13 +7,15 @@ export class LocoFunction extends RocWctLitElement {
 
   static get styles() {
     return [ 
-      css`.on::after { content: " ON"; } `,
-      css`.off::after { content: "OFF "; } `
+      css`.on { background-color: green; } .on::after { content: " ON"; } `,
+      css`.off { background-color: red; } .off::after { content: "OFF "; } `
     ]
    ;
   }
 
   @property({ type : Boolean })  on = null;
+  @property({ type : String })  icon = null;
+  @property({ type : String })  text = null;
   @property({ type : String, attribute : "loco-id" }) locoId = "";
   @property({ type : String, attribute : "fn" }) fn = "";
 
@@ -26,7 +28,7 @@ export class LocoFunction extends RocWctLitElement {
     
   render() {
     return html`${this.on != null
-      ? html`<button class="${this.on === true ? "on" : "off"}" @click="${this.handleClick}"><slot name="btnContent">${this.locoId}, ${this.fn}, </slot></button>`
+      ? html`<button class="${this.on === true ? "on" : "off"}" @click="${this.handleClick}"><slot name="btnContent">${this.locoId}, ${this.fn}, ${this.text}, ${this.icon} </slot></button>`
       : html``
     }`;
   }
@@ -45,13 +47,36 @@ export class LocoFunction extends RocWctLitElement {
     // https://forum.rocrail.net/viewtopic.php?f=11&t=16987&hilit=rcp
     event.plan.lclist.lc.forEach(loco => {
       if(loco.id === this.locoId) {
-        let binRep : string = loco.fx.toString(2);
-        let myPos : number =  this.extractFunctionNumber();
+        // on/off state
         let funcOn : boolean = false;
-        if(myPos <= binRep.length) {
-          funcOn = binRep.substr(binRep.length-myPos, 1) === "1";
-        }        
+        let myPos : number =  this.extractFunctionNumber();if(myPos === 0) {
+            funcOn = loco.fn;
+          } else {
+            let binRep : string = (loco.fx >>> 0).toString(2);
+            if(myPos <= binRep.length) {
+              funcOn = binRep.substr(binRep.length-myPos, 1) === "1";
+            }
+        } 
         this.on = funcOn;
+
+        // text & icon (fundef)
+        if(loco.fundef) {
+          let fundefElem : Fundef = null;
+          if(Array.isArray(loco.fundef)) {
+            loco.fundef.forEach(fndf => {
+              if(fndf.fn === this.extractFunctionNumber()) {
+                fundefElem = fndf;
+              }
+            });
+          } else {
+            fundefElem = (loco.fundef);
+          }
+          
+          if(fundefElem != null) {
+            this.text = fundefElem.text;
+            this.icon = fundefElem.icon;
+          }
+        };
       }
     });
   }

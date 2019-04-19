@@ -17,7 +17,8 @@ function initWebSocket() {
         log("websocket connection is open");
     };
     socket.onmessage = function (evt) {
-        log("<<<< IN: " + evt.data);
+        log("<<<< IN: ");
+        log(evt.data);
         var data = JSON.parse(evt.data);
         subscribtions.forEach(subscribtion => {
             let eventName : String = EServerEvent[subscribtion.event];
@@ -34,7 +35,7 @@ function initWebSocket() {
 }
 
 function log(msg : String) {
-    console.log("rocwct: " + msg); 
+    console.log(msg); 
 }
 
 export function unsubscribe(component) {
@@ -51,6 +52,7 @@ export async function send(message : string) {
         await new Promise(resolve => setTimeout(resolve, 100));
     }
     // send message
-    log(">>>> OUT: " + message);
+    log(">>>> OUT: ");
+    log(message);
     socket.send(message);
 }

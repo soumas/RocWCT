@@ -52,15 +52,29 @@ export interface Lightctrl {
     converted: boolean;
 }
 
+export interface Fundef {
+    timer: number;
+    pushbutton: boolean;
+    sound: string;
+    fn: number;
+    icon: string;
+    iconnr: number;
+    text: string;
+    addr: number;
+    mappedfn: number;
+}
+
 export interface Lc {
+    controlcode: string;
     V_min: number;
     blockenterside: boolean;
     regulated: boolean;
     usescheduletime: boolean;
+    forcesamedir: boolean;
     V_realkmh: number;
     consist: string;
     signalaspect: string;
-    number: any;
+    number: string;
     maxload: number;
     docu: string;
     V_max: number;
@@ -69,11 +83,13 @@ export interface Lc {
     bbtmaxdiff: number;
     id: string;
     cargo: string;
+    trysamedir: boolean;
     trainlen: number;
     consist_lightsoff: boolean;
-    identifier: any;
+    identifier: string;
     usedepartdelay: boolean;
     V_step: number;
+    standalone: boolean;
     active: boolean;
     V_Rmin: number;
     info4throttle: boolean;
@@ -90,11 +106,14 @@ export interface Lc {
     evttimer: number;
     bbtcorrection: number;
     routespeedatenter: boolean;
+    server: string;
     KMH_min: number;
     iid: string;
+    polarisation: boolean;
     destblockid: string;
     protver: number;
     manual: boolean;
+    nraxis: number;
     consist_syncfunmap: number;
     secspcnt: number;
     KMH_Rmin: number;
@@ -102,10 +121,11 @@ export interface Lc {
     mint: number;
     prot: string;
     KMH_mid: number;
+    rdate: number;
     check2in: boolean;
     era: number;
-    rdate: number;
     V: number;
+    slavecode: string;
     KMH_Rmid: number;
     consist_synclights: boolean;
     spcnt: number;
@@ -114,10 +134,11 @@ export interface Lc {
     useshortid: boolean;
     waittime: number;
     energypercentage: number;
-    accelmax: number;
     throttleid: string;
+    accelmax: number;
     fncnt: number;
     ent2incorr: number;
+    tryoppositedir: boolean;
     secondnextblock4wait: boolean;
     cvnrs: string;
     Vmidpercent: number;
@@ -130,12 +151,15 @@ export interface Lc {
     resumeauto: boolean;
     placing: boolean;
     mode: string;
+    scheduleinithour: number;
     startuptourid: string;
+    fundef: Fundef[] | Fundef;
     decfile: string;
     V_cru: number;
     decelerate: number;
     generated: boolean;
     shortin: boolean;
+    radius: number;
     usemanualroutes: boolean;
     train: string;
     image: string;
@@ -146,8 +170,8 @@ export interface Lc {
     freeblockonenter: boolean;
     secaddr: number;
     modereason: string;
-    weight: number;
     runtime: number;
+    weight: number;
     imagenr: number;
     pause: boolean;
     prev_id: string;
@@ -165,11 +189,11 @@ export interface Lc {
     blockenterid: string;
     V_mode: string;
     adjustaccel: boolean;
-    color: string;
     cmdDelay: number;
+    color: string;
     mass: number;
-    show: boolean;
     fn: boolean;
+    show: boolean;
     nrcars: number;
     remark: string;
     swaptimer: number;
@@ -177,10 +201,10 @@ export interface Lc {
     dirpause: number;
     dectype: string;
     V_maxkmh: number;
-    maxwaittime: number;
     blockid: string;
-    V_maxsec: number;
+    maxwaittime: number;
     fx: number;
+    V_maxsec: number;
     inatpre2in: boolean;
     useownwaittime: boolean;
     engine: string;
@@ -188,14 +212,16 @@ export interface Lc {
     minenergypercentage: number;
     throttlenr: number;
     addr: number;
-    value: string;
     V_Rmid: number;
-    class: string;
     trainweight: number;
+    value: string;
+    class: string;
+    eng: string;
     Vmaxkmh: number;
-    owner: string;
     restorefx: boolean;
+    owner: string;
     consist_syncfun: boolean;
+    informall: boolean;
     secondnextblock: boolean;
     scidx: number;
     home: string;
@@ -204,11 +230,6 @@ export interface Lc {
     V_hint: string;
     scheduleid: string;
     roadname: string;
-    standalone?: boolean;
-    polarisation?: boolean;
-    nraxis?: number;
-    radius?: number;
-    informall?: boolean;
 }
 
 export interface Lclist {
