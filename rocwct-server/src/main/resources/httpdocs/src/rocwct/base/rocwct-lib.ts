@@ -6,9 +6,12 @@ import * as rocwct from '../rocwct';
 /***********************************************************/
 export abstract class RocWctLitElement extends LitElement {
 
-    // static get styles() {
-    //     return [ css`:host { display: block; }`];
-    // }
+    static get baseStyles() {
+        return [ css`:host { display: block; }`,
+                 css`.btn { display: block; width:100%; border: none; cursor: pointer; }`,
+                 css`.btn-on { font-weight: bold; background-color: green; }`,
+                 css`.btn-off { background-color: red; }`];
+    }
 
     constructor() {
         super();

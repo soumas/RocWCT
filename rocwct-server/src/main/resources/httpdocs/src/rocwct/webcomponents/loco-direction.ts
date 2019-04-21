@@ -7,6 +7,7 @@ export class LocoDirection extends RocWctLitElement {
 
   static get styles() {
     return [ 
+      RocWctLitElement.baseStyles,
       css`.forward::after { content: " >>"; } `,
       css`.backward::before { content: "<< "; } `
     ]
@@ -27,7 +28,7 @@ export class LocoDirection extends RocWctLitElement {
     
   render() {
     return html`${this.forward != null
-      ? html`<button class="${this.forward === true ? "forward" : "backward"}" @click="${this.handleClick}"><slot name="btnContent">${this.locoId}</slot></button>`
+      ? html`<button class="btn ${this.forward === true ? "forward" : "backward"}" @click="${this.handleClick}"><slot name="btnContent">${this.locoId}</slot></button>`
       : html``
     }`;
   }

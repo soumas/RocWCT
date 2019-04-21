@@ -7,8 +7,9 @@ export class LocoFunction extends RocWctLitElement {
 
   static get styles() {
     return [ 
-      css`.on { background-color: green; } .on::after { content: " ON"; } `,
-      css`.off { background-color: red; } .off::after { content: "OFF "; } `
+      RocWctLitElement.baseStyles,
+      css`.btn-on::after { content: " ON"; } `,
+      css`.btn-off::after { content: "OFF "; } `
     ]
    ;
   }
@@ -28,7 +29,7 @@ export class LocoFunction extends RocWctLitElement {
     
   render() {
     return html`${this.on != null
-      ? html`<button class="${this.on === true ? "on" : "off"}" @click="${this.handleClick}"><slot name="btnContent">${this.locoId}, ${this.fn}, ${this.text}, ${this.icon} </slot></button>`
+      ? html`<button type="button" class="btn ${this.on === true ? "btn-on" : "btn-off"}" @click="${this.handleClick}">${this.fn}, ${this.text}, ${this.icon}</button>`
       : html``
     }`;
   }
@@ -61,6 +62,9 @@ export class LocoFunction extends RocWctLitElement {
 
         // text & icon (fundef)
         if(loco.fundef) {
+          // select the fundef-element for current function
+          // the fundef node may be an instance of Fundef or an 
+          // array (if multiple definitions are available)
           let fundefElem : Fundef = null;
           if(Array.isArray(loco.fundef)) {
             loco.fundef.forEach(fndf => {
@@ -71,7 +75,7 @@ export class LocoFunction extends RocWctLitElement {
           } else {
             fundefElem = (loco.fundef);
           }
-          
+
           if(fundefElem != null) {
             this.text = fundefElem.text;
             this.icon = fundefElem.icon;

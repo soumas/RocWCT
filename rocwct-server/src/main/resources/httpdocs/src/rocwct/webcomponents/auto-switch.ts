@@ -7,8 +7,9 @@ export class AutoSwitch extends RocWctLitElement {
 
   static get styles() {
     return [ 
-      css`.on::after { content: " ON"; } `,
-      css`.off::after { content: "OFF "; } `
+      RocWctLitElement.baseStyles,
+      css`.btn-on::after { content: " ON"; } `,
+      css`.btn-off::after { content: "OFF "; } `
     ]
    ;
   }
@@ -23,7 +24,7 @@ export class AutoSwitch extends RocWctLitElement {
     
   render() {
     return html`${this.on != null
-      ? html`<button class="${this.on === true ? "on" : "off"}" @click="${this.handleClick}"><slot name="btnContent">Auto </slot></button>`
+      ? html`<button class="btn ${this.on === true ? "btn-on" : "btn-off"}" @click="${this.handleClick}">Auto</button>`
       : html``
     }`;
   }
