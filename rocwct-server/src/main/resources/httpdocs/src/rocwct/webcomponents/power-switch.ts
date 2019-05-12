@@ -24,7 +24,7 @@ export class PowerSwitch extends RocWctLitElement {
     
   render() {
     return html`${this.on != null
-      ? html`<button class="btn ${this.on === true ? "btn-on" : "btn-off"}" @click="${this.handleClick}"><img src="../images/locs/train-fwd.png" /></button>`
+      ? html`<button class="btn ${this.on === true ? "btn-on" : "btn-off"}" @click="${this.handleClick}"></iron-icon></button>`
       : html``
     }`;
   }

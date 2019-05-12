@@ -1,4 +1,6 @@
 import { LitElement, css } from 'lit-element';
+import '@polymer/iron-icon/iron-icon.js'
+import '@polymer/iron-icons/iron-icons.js'
 import * as rocwct from '../rocwct';
 
 /***********************************************************/
@@ -7,10 +9,11 @@ import * as rocwct from '../rocwct';
 export abstract class RocWctLitElement extends LitElement {
 
     static get baseStyles() {
-        return [ css`:host { display: block; }`,
-                 css`.btn { display: block; width:100%; border: none; cursor: pointer; }`,
-                 css`.btn-on { font-weight: bold; background-color: green; }`,
-                 css`.btn-off { background-color: red; }`];
+        return [css`:host { display: block; }`,
+                css`button { border: none; background: transparent; outline: none; }`,
+                css`.btn { color: #ccc; cursor: pointer; width: 100%; height: 100%; }`,
+                css`.btn-active { color: green; }`
+            ];
     }
 
     constructor() {
