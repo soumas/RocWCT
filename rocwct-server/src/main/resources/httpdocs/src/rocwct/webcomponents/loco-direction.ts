@@ -17,6 +17,8 @@ export class LocoDirection extends RocWctLitElement {
   @property({ type : String })  icon = null;
   @property({ type : String, attribute : "loco-id" }) locoId = null;
   @property({ type : String, attribute : "direction" }) direction = null;
+  @property({ type : String, attribute : "icon-forward" }) iconForward = "chevron-right";
+  @property({ type : String, attribute : "icon-backward" }) iconBackward = "chevron-left";
 
   connectedCallback() {
     super.connectedCallback();
@@ -28,7 +30,7 @@ export class LocoDirection extends RocWctLitElement {
     
   render() {
     return html`${this.forward != null
-      ? html`<button><iron-icon class="btn ${this.btnActive === true ? "btn-active" : ""}" @click="${this.handleClick}" icon="${this.icon}" /></button>`
+      ? html`<button @click="${this.handleClick}" ><iron-icon class="btn ${this.btnActive === true ? "btn-active" : ""}" icon="${this.icon}" /></button>`
       : html``
     }`;
   }
@@ -62,13 +64,13 @@ export class LocoDirection extends RocWctLitElement {
   updateButtonState() {
     if(this.direction === 'forward') {
       this.btnActive = this.forward === true;
-      this.icon = "chevron-right";
+      this.icon = this.iconForward;
     } else if(this.direction === 'backward') {
       this.btnActive = this.forward === false;
-      this.icon = "chevron-left";
+      this.icon = this.iconBackward;
     } else {
       this.btnActive = true;
-      this.icon = (this.forward === true) ? "chevron-right" : "chevron-left";
+      this.icon = (this.forward === true) ? this.iconForward : this.iconBackward;
     }
   }
 

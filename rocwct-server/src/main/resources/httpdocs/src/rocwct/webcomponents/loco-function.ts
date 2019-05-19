@@ -29,7 +29,9 @@ export class LocoFunction extends RocWctLitElement {
     
   render() {
     return html`${this.on != null
-      ? html`<button type="button" class="btn ${this.on === true ? "btn-on" : "btn-off"}" @click="${this.handleClick}">${this.fn}, ${this.text}, ${this.icon}</button>`
+      //? html`<button type="button" class="btn ${this.on === true ? "btn-on" : "btn-off"}" @click="${this.handleClick}">${this.fn}, ${this.text}, ${this.icon}</button>`
+      //? html`<button @click="${this.handleClick}"><div class="btn ${this.on === true ? "btn-active" : ""}"></div></button>`
+      ? html`<button @click="${this.handleClick}"><div class="btn ${this.on === true ? "btn-active" : ""}"><img src="/images/rocrail/train-fwd.png" alt=""><br/>${this.fn}</div></button>`
       : html``
     }`;
   }

@@ -11,8 +11,9 @@ export abstract class RocWctLitElement extends LitElement {
     static get baseStyles() {
         return [css`:host { display: block; }`,
                 css`button { border: none; background: transparent; outline: none; }`,
-                css`.btn { color: #ccc; cursor: pointer; width: 100%; height: 100%; }`,
-                css`.btn-active { color: green; }`
+                css`.btn { color: #7E888A; cursor: pointer; width: 100%; height: 100%; }`,
+                css`.btn:active { -webkit-transform: scale(0.9); transform: scale(0.9); }`,
+                css`.btn-active { color: #FCAE01; }`
             ];
     }
 

@@ -7,14 +7,15 @@ export class PowerSwitch extends RocWctLitElement {
 
   static get styles() {
     return [ 
-      RocWctLitElement.baseStyles,
-      css`.btn-on::after { content: " ON"; } `,
-      css`.btn-off::after { content: "OFF "; } `
+      RocWctLitElement.baseStyles
     ]
    ;
   }
 
   @property({ type : Boolean })  on = null;
+  @property({ type : String })  icon = null;
+  @property({ type : String, attribute : "icon-on" }) iconOn = "power-settings-new";
+  @property({ type : String, attribute : "icon-off" }) iconOff = "power-settings-new";
 
   connectedCallback() {
     super.connectedCallback();
@@ -24,7 +25,7 @@ export class PowerSwitch extends RocWctLitElement {
     
   render() {
     return html`${this.on != null
-      ? html`<button class="btn ${this.on === true ? "btn-on" : "btn-off"}" @click="${this.handleClick}"></iron-icon></button>`
+      ? html`<button @click="${this.handleClick}" ><iron-icon class="btn ${this.on === true ? "btn-active" : ""}" icon="${this.icon}" /></button>`
       : html``
     }`;
   }
@@ -39,6 +40,7 @@ export class PowerSwitch extends RocWctLitElement {
 
   onServerEvent(event : RocrailEventState) {
     this.on = event.state.power;
+    this.updateButtonState();
   }
 
   sendCmd() : void {
@@ -46,4 +48,11 @@ export class PowerSwitch extends RocWctLitElement {
     rocwct.send(cmd); 
   }
 
+  updateButtonState() {
+    if(this.on === true) {
+      this.icon = this.iconOn;
+    } else {
+      this.icon = this.iconOff;
+    } 
+  }
 }
