@@ -14,8 +14,8 @@ export class PowerSwitch extends RocWctLitElement {
 
   @property({ type : Boolean })  on = null;
   @property({ type : String })  icon = null;
-  @property({ type : String, attribute : "icon-on" }) iconOn = "power-settings-new";
-  @property({ type : String, attribute : "icon-off" }) iconOff = "power-settings-new";
+  @property({ type : String, attribute : "icon-on" }) iconOn = "power-on.png";
+  @property({ type : String, attribute : "icon-off" }) iconOff = "power-off.png";
 
   connectedCallback() {
     super.connectedCallback();
@@ -25,7 +25,7 @@ export class PowerSwitch extends RocWctLitElement {
     
   render() {
     return html`${this.on != null
-      ? html`<button @click="${this.handleClick}" ><iron-icon class="btn ${this.on === true ? "btn-active" : ""}" icon="${this.icon}" /></button>`
+      ? html`<button @click="${this.handleClick}" ><img src="${this.iconSetRoot}/${this.icon}" alt="power" title="power" /></button>`
       : html``
     }`;
   }

@@ -95,8 +95,6 @@ export class LocoFunction extends RocWctLitElement {
   }
 
   sendCmd() : void {
-    //let cmd : string = `<fn fnchanged="${this.extractFunctionNumber()}" fnchangedstate="true" id="${this.locoId}" group="1" fncnt="4" addr="7" shift="false" f4="true" throttleid="rv12140" controlcode="" slavecode=""/>`;
-    //let cmd : string = `<fn id="${this.locoId}" ${this.fn}="${this.on === true ? "false" : "true"}"  />`;
     let group : number = 1; //(this.extractFunctionNumber()-1)/4+1; TODO
     let cmd : string = `<fn controlcode="" slavecode="" id="${this.locoId}" throttleid="" fnchanged="${this.extractFunctionNumber()}" group="${group}" f${this.extractFunctionNumber()}="${this.on === true ? "false" : "true"}" />`;
     rocwct.send(cmd); 
