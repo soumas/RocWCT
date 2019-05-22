@@ -14,12 +14,11 @@ export class LocoDirection extends RocWctLitElement {
 
   @property({ type : Boolean })  forward = null;
   @property({ type : String })  icon = null;
+  @property({ type : String })  on = null;
   @property({ type : String, attribute : "loco-id" }) locoId = null;
   @property({ type : String, attribute : "direction" }) direction = null;
-  @property({ type : String, attribute : "icon-forward-on" }) iconForwardOn = "chevron-right-on.png";
-  @property({ type : String, attribute : "icon-forward-off" }) iconForwardOff = "chevron-right-off.png";
-  @property({ type : String, attribute : "icon-backward-on" }) iconBackwardOn = "chevron-left-on.png";
-  @property({ type : String, attribute : "icon-backward-off" }) iconBackwardOff = "chevron-left-off.png";
+  @property({ type : String, attribute : "icon-forward" }) iconForward = "chevron-right.svg";
+  @property({ type : String, attribute : "icon-backward" }) iconBackward = "chevron-left.svg";
 
   connectedCallback() {
     super.connectedCallback();
@@ -31,7 +30,9 @@ export class LocoDirection extends RocWctLitElement {
     
   render() {
     return html`${this.forward != null
-      ? html`<button @click="${this.handleClick}" ><img src="${this.iconSetRoot}/${this.icon}" alt="direction" title="direction" /></button>`
+      ? html`<div class="btn-container">
+                <div class="btn icon ${this.on === true ? "on" : "off"}" style="-webkit-mask: url(${this.iconSetRoot}/${this.icon}) no-repeat center; mask: url(${this.iconSetRoot}/${this.icon}) no-repeat center;" @click="${this.handleClick}"></div>
+            </div>`
       : html``
     }`;
   }
@@ -64,11 +65,14 @@ export class LocoDirection extends RocWctLitElement {
 
   updateButtonState() {
     if(this.direction === 'forward') {
-      this.icon = (this.forward  === true) ? this.iconForwardOn : this.iconForwardOff;
+      this.icon = this.iconForward;
+      this.on = this.forward === true;
     } else if(this.direction === 'backward') {
-      this.icon = !(this.forward === true) ? this.iconBackwardOn : this.iconBackwardOff;
+      this.icon = this.iconBackward;
+      this.on = this.forward === false;
     } else {
-      this.icon = (this.forward === true) ? this.iconForwardOn : this.iconBackwardOn;
+      this.icon = (this.forward === true) ? this.iconForward : this.iconBackward;
+      this.on = true;
     }
   }
 

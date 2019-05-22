@@ -7,14 +7,18 @@ import * as rocwct from '../rocwct';
 export abstract class RocWctLitElement extends LitElement {
 
     static get baseStyles() {
-        return [css`:host { display: block; }`,
-                css`button { border: none; background: transparent; outline: none; }`,
-                css`button > img { cursor: pointer; width: 100%; height: 100%; }`,
-                css`button > img:active { -webkit-transform: scale(0.9); transform: scale(0.9); }`
+        return [css`:host { display: block; width: 100%; height: 100%; }`,
+                css`.btn-container { cursor: pointer;  width: 100%; height: 100%;}`,
+                css`.btn { width: 100%; height: 100%;}`,
+                css`.btn.off { color: #7E888A; }`,
+                css`.btn.on { color: #FCAE01; }`,
+                css`.btn.icon.off { background-color: #7E888A; }`,
+                css`.btn.icon.on { background-color: #FCAE01; }`,
+                css`.btn:active { -webkit-transform: scale(0.94); transform: scale(0.94); }`
             ];
     }
 
-    protected iconSetRoot : string = "/images/iconset-default/";
+    protected iconSetRoot : string = "/images/iconset-default";
 
     constructor() {
         super();

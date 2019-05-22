@@ -8,15 +8,15 @@ export class LocoFunction extends RocWctLitElement {
   static get styles() {
     return [ 
       RocWctLitElement.baseStyles,
-      css`.btn-on::after { content: " ON"; } `,
-      css`.btn-off::after { content: "OFF "; } `
+      css`.btn { height: 75%; }`,
+      css`.lbl { height: 25%; overflow:hidden; width:100%; text-align: center; font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-size: 10px; font-color:#7E888A; }`,
     ]
    ;
   }
 
   @property({ type : Boolean })  on = null;
-  @property({ type : String })  icon = null;
-  @property({ type : String })  text = null;
+  @property({ type : String, attribute : "text" }) text = null;  
+  @property({ type : String, attribute : "icon" }) icon = "circle.svg";
   @property({ type : String, attribute : "loco-id" }) locoId = "";
   @property({ type : String, attribute : "fn" }) fn = "";
 
@@ -29,9 +29,10 @@ export class LocoFunction extends RocWctLitElement {
     
   render() {
     return html`${this.on != null
-      //? html`<button type="button" class="btn ${this.on === true ? "btn-on" : "btn-off"}" @click="${this.handleClick}">${this.fn}, ${this.text}, ${this.icon}</button>`
-      //? html`<button @click="${this.handleClick}"><div class="btn ${this.on === true ? "btn-active" : ""}"></div></button>`
-      ? html`<button @click="${this.handleClick}"><div class="btn ${this.on === true ? "btn-active" : ""}"><img src="/images/rocrail/train-fwd.png" alt=""><br/>${this.fn}</div></button>`
+      ? html`<div class="btn-container">
+                <div class="btn icon ${this.on === true ? "on" : "off"}" style="-webkit-mask: url(${this.iconSetRoot}/${this.icon}) no-repeat center; mask: url(${this.iconSetRoot}/${this.icon}) no-repeat center;" @click="${this.handleClick}"></div>
+                <div class="lbl"><span>${this.text}</span></div>
+            </div>`
       : html``
     }`;
   }
@@ -79,8 +80,16 @@ export class LocoFunction extends RocWctLitElement {
           }
 
           if(fundefElem != null) {
-            this.text = fundefElem.text;
-            this.icon = fundefElem.icon;
+            if(fundefElem.text && fundefElem.text.trim().length>0) {
+              this.text = fundefElem.text;
+            }
+            if(fundefElem.icon && fundefElem.icon.length>0) {
+              this.icon = fundefElem.icon;
+            }
+          }
+
+          if(!this.text || this.text.trim().length===0) {
+            this.text = this.fn.toUpperCase();
           }
         };
       }
