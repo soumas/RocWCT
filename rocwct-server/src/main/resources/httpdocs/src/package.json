@@ -25,7 +25,8 @@
   "dependencies": {
     "@polymer/iron-icons": "^3.0.1",
     "@polymer/iron-iconset": "^3.0.1",
-    "lit-element": "^2.1.0",
-    "nouislider": "^13.1.5"
+    "@polymer/paper-slider": "^3.0.1",
+    "emoji-slider": "^0.2.0",
+    "lit-element": "^2.1.0"
   }
 }
