@@ -9,7 +9,7 @@ export abstract class RocWctLitElement extends LitElement {
     static get baseStyles() {
         return [css`:host { display: block; width: 100%; height: 100%; }`,
                 css`.btn-container { cursor: pointer;  width: 100%; height: 100%;}`,
-                css`.btn { width: 100%; height: 100%;}`,
+                css`.btn { cursor: pointer; width: 100%; height: 100%;}`,
                 css`.btn.off { color: #7E888A; }`,
                 css`.btn.on { color: #FCAE01; }`,
                 css`.btn.icon.off { background-color: #7E888A; }`,
