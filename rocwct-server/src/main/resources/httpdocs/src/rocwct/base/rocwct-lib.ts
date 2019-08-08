@@ -35,6 +35,14 @@ export abstract class RocWctLitElement extends LitElement {
 }
 
 /***********************************************************/
+/******************* common enums  *************************/
+/***********************************************************/
+export enum EVMode {
+    percent, kmh
+}
+
+
+/***********************************************************/
 /******************* Server Events *************************/
 /***********************************************************/
 export class ServerEventSubscription {
@@ -45,7 +53,7 @@ export class ServerEventSubscription {
 }
 
 export enum EServerEvent {
-    plan, lc, auto, clock, fn, state
+    plan, lc, auto, clock, fn, state, lclist
 }
 
 export interface IServerEventCallback  {
@@ -847,6 +855,10 @@ export interface RocrailEventPlan {
 
 export interface RocrailEventLc {
     lc: Lc;
+}
+
+export interface RocrailEventLclist {
+    lclist: Lclist;
 }
 
 export interface RocrailEventAuto {

@@ -23,8 +23,6 @@ export class LocoDirection extends RocWctLitElement {
   connectedCallback() {
     super.connectedCallback();
     this.registerServerEvent(EServerEvent.lc, this.locoId, res => this.onServerEvent(res));
-    // trigger server-event by sending an empty dir-command
-    this.sendDirCmd();    
     this.sendInitCommand();
   }
     

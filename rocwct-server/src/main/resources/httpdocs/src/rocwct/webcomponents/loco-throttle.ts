@@ -1,6 +1,6 @@
 import { html, customElement, css, property } from 'lit-element';
 import '@polymer/paper-slider/paper-slider.js';
-import { RocWctLitElement, EServerEvent, RocrailEventState } from '../base/rocwct-lib';
+import { RocWctLitElement, EServerEvent, RocrailEventLc, EVMode } from '../base/rocwct-lib';
 import * as rocwct from '../rocwct';
 
 @customElement('loco-throttle')
@@ -62,14 +62,36 @@ export class PowerSwitch extends RocWctLitElement {
       ;
   }
 
-  @property({ type: Number }) val = 0;
+  @property({ type : String, attribute : "loco-id" }) locoId = "";  
+  @property({ type: Number }) sliderMax = null;
+  @property({ type: Number }) vCurrent = null;
+  @property({ type: EVMode }) vMode = null;
+  @property({ type: Number }) vMin = null;
+  @property({ type: Number }) vMid = null;
+  @property({ type: Number }) vCru = null;
+  @property({ type: Number }) vMax = null;
+  cfgVMin : number = null;
+  cfgVMid : number = null;
+  cfgVCru : number = null;
+  cfgVMax : number = null;
+  cfgVRMin : number = null;
+  cfgVRMid : number = null;
+  cfgVRCru : number = null;
+  cfgVRMax : number = null;
 
   connectedCallback() {
     super.connectedCallback();
+    this.registerServerEvent(EServerEvent.lc, this.locoId, res => this.onServerEventLc(res));
+    this.sendInitCommand();
   }
+  
+  sendInitCommand() {    
+    rocwct.send(`<model cmd="lcprops" />`); 
+  }  
 
   render() {
-    return html`
+    return html`${this.vCurrent != null
+      ? html`
         <div class="indikator-track">							
           <div class="indikator top" style="height:2px;left:5%"></div>
           <div class="indikator top" style="height:2px;left:10%"></div>
@@ -91,7 +113,7 @@ export class PowerSwitch extends RocWctLitElement {
           <div class="indikator top" style="height:9px;left:90%"></div>
           <div class="indikator top" style="height:10px;left:95%"></div>
         </div>							
-        <input type="range" min="1" max="100" value="${this.val}" @change="${this.sliderChange}" class="slider" >
+        <input type="range" min="0" step="1" max="${this.sliderMax}" .value="${this.vCurrent}" @change="${(e) => this.sendCommnd(e.target.value)}" class="slider" >
         <div class="indikator-track">
           <div class="indikator" style="height:2px;left:5%"></div>
           <div class="indikator" style="height:2px;left:10%"></div>
@@ -115,26 +137,44 @@ export class PowerSwitch extends RocWctLitElement {
         </div>						  
         <div class="control-container">
           <div class="control-box">
-            <div class="btn icon off" @click="${this.setValue}" value="20" style="-webkit-mask: url(/images/iconset-default/gauge_0.svg) no-repeat center; mask: url(/images/iconset-default/gauge_0.svg) no-repeat center;"></div>
+            <div class="btn icon off" @click="${() => this.sendCommnd(this.vMin)}" style="-webkit-mask: url(/images/iconset-default/gauge_0.svg) no-repeat center; mask: url(/images/iconset-default/gauge_0.svg) no-repeat center;"></div>
           </div>							  
           <div class="control-box">
-            <div class="btn icon off" @click="${this.setValue}" value="80" style="-webkit-mask: url(/images/iconset-default/gauge_1.svg) no-repeat center; mask: url(/images/iconset-default/gauge_1.svg) no-repeat center;"></div>
+            <div class="btn icon off" @click="${() => this.sendCommnd(this.vMid)}" style="-webkit-mask: url(/images/iconset-default/gauge_1.svg) no-repeat center; mask: url(/images/iconset-default/gauge_1.svg) no-repeat center;"></div>
           </div>					  
           <div class="control-box">
-            <div class="btn icon off" @click="${this.setValue}" value="80" style="-webkit-mask: url(/images/iconset-default/gauge_2.svg) no-repeat center; mask: url(/images/iconset-default/gauge_2.svg) no-repeat center;"></div>
+            <div class="btn icon off" @click="${() => this.sendCommnd(this.vCru)}" style="-webkit-mask: url(/images/iconset-default/gauge_2.svg) no-repeat center; mask: url(/images/iconset-default/gauge_2.svg) no-repeat center;"></div>
           </div>					  
           <div class="control-box">
-            <div class="btn icon off" @click="${this.setValue}" value="100" style="-webkit-mask: url(/images/iconset-default/gauge_3.svg) no-repeat center; mask: url(/images/iconset-default/gauge_3.svg) no-repeat center;"></div>
+            <div class="btn icon off" @click="${() => this.sendCommnd(this.vMax)}" style="-webkit-mask: url(/images/iconset-default/gauge_3.svg) no-repeat center; mask: url(/images/iconset-default/gauge_3.svg) no-repeat center;"></div>
           </div>
-        </div>`;
+        </div>`
+        : html``
+      }`;
   }
 
-  sliderChange(e: any) {
-    this.val = e.target.value;
-  }
-
-  setValue(e: any) {
-    alert(e.target.value);
+  sendCommnd(speed: number) {
+    rocwct.send(`<lc id="${this.locoId}" V="${speed}" controlcode="" slavecode="" />`);    
   }
   
+  onServerEventLc(event:RocrailEventLc) {    
+    if(!isNaN(event.lc.V_min)) {
+      // if event.lc.V_min is a number... use it as new cfgVMin
+      this.cfgVMin = event.lc.V_min;
+      this.cfgVMid = event.lc.V_mid;
+      this.cfgVCru = event.lc.V_cru;
+      this.cfgVMax = event.lc.V_max;
+      this.cfgVRMin = (!isNaN(event.lc.V_Rmin) && event.lc.V_Rmin > 0) ? event.lc.V_Rmin : event.lc.V_min;
+      this.cfgVRMid = (!isNaN(event.lc.V_Rmid) && event.lc.V_Rmid > 0) ? event.lc.V_Rmid : event.lc.V_mid;
+      this.cfgVRCru = (!isNaN(event.lc.V_Rcru) && event.lc.V_Rcru > 0) ? event.lc.V_Rcru : event.lc.V_cru;
+      this.cfgVRMax = (!isNaN(event.lc.V_Rmax) && event.lc.V_Rmax > 0) ? event.lc.V_Rmax : event.lc.V_max;
+    }
+    this.sliderMax = this.cfgVMax;
+    this.vMin = event.lc.dir ? this.cfgVMin : this.cfgVRMin;
+    this.vMid = event.lc.dir ? this.cfgVMid : this.cfgVRMid;
+    this.vCru = event.lc.dir ? this.cfgVCru : this.cfgVRCru;
+    this.vMax = event.lc.dir ? this.cfgVMax : this.cfgVRMax;    
+    this.vCurrent = event.lc.V;
+  }
 }
+

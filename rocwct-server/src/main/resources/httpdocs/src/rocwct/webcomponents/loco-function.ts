@@ -1,5 +1,5 @@
 import { html, customElement, css, property } from 'lit-element';
-import { RocWctLitElement, EServerEvent, RocrailEventFn, RocrailEventPlan, Fundef }  from '../base/rocwct-lib';
+import { RocWctLitElement, EServerEvent, RocrailEventFn, Lc, Fundef, RocrailEventLc }  from '../base/rocwct-lib';
 import * as rocwct from '../rocwct';
 
 @customElement('loco-function')
@@ -23,7 +23,7 @@ export class LocoFunction extends RocWctLitElement {
   connectedCallback() {
     super.connectedCallback();
     this.registerServerEvent(EServerEvent.fn, this.locoId, res => this.onServerEvent(res));
-    this.registerServerEvent(EServerEvent.plan, null, res => this.onInitialServerEvent(res));
+    this.registerServerEvent(EServerEvent.lc, this.locoId, res => this.onInitialServerEvent(res));
     this.sendInitCommand();
   }
     
@@ -42,14 +42,13 @@ export class LocoFunction extends RocWctLitElement {
   }
 
   sendInitCommand() {    
-    rocwct.send(`<model cmd="plan" />`); 
+    rocwct.send(`<model cmd="lcprops" />`); 
   }  
 
-  onInitialServerEvent(event : RocrailEventPlan) {
-    // the initial model plan contains the property 'fx" for each loco.
-    // the value of this property represents one bit for each function.
+  onInitialServerEvent(event : RocrailEventLc) {
+    // the value of the property 'fx' represents one bit for each function.
     // https://forum.rocrail.net/viewtopic.php?f=11&t=16987&hilit=rcp
-    event.plan.lclist.lc.forEach(loco => {
+    let loco : Lc = event.lc;
       if(loco.id === this.locoId) {
         // on/off state
         let funcOn : boolean = false;
@@ -93,7 +92,6 @@ export class LocoFunction extends RocWctLitElement {
           }
         };
       }
-    });
   }
 
   onServerEvent(event : RocrailEventFn) {

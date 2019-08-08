@@ -7,7 +7,7 @@ export class RcpTester extends RocWctLitElement {
 
   render() {
     return html`
-      <input type="text" id="cmd" placeholder="z.B.: <sys cmd=&quot;go&quot; />"><br/>
+      <textarea id="cmd" placeholder="z.B.: <sys cmd=&quot;go&quot; />" style="width:100%"></textarea><br/>
       <button @click="${this.handleClick}" >Send command</button><br/>
       <span><a href="https://wiki.rocrail.net/doku.php?id=cs-protocol-en" target="_blank">Rocrail Client Protocol (RCP)</a></span>
     `;
