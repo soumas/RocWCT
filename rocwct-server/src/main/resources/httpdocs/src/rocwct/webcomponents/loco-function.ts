@@ -16,7 +16,7 @@ export class LocoFunction extends RocWctLitElement {
 
   @property({ type : Boolean })  on = null;
   @property({ type : String, attribute : "text" }) text = null;  
-  @property({ type : String, attribute : "icon" }) icon = "circle.svg";
+  @property({ type : String, attribute : "icon" }) icon = "lens.svg";
   @property({ type : String, attribute : "loco-id" }) locoId = "";
   @property({ type : String, attribute : "fn" }) fn = "";
 

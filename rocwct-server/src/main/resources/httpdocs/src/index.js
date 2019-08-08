@@ -5,3 +5,4 @@ import './tsc_out/webcomponents/loco-direction';
 import './tsc_out/webcomponents/loco-throttle';
 import './tsc_out/webcomponents/power-switch';
 import './tsc_out/webcomponents/auto-switch';
+import './tsc_out/webcomponents/loco-stop';
