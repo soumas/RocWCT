@@ -10,8 +10,14 @@
 			height: 48px;
 		}
 	</style>
+	<script>
+		function doIt() {
+			document.getElementById("locostop").setAttribute("loco-id","V200");
+		};
+	</script>
 </head>
 <body>
+	<button id="xxx" onclick="javasript:doIt();">loco-id auf V200 setzen (loco-stop)</button>
 	<table border="1">
 		<tr>
 			<td>Component</td>
@@ -24,7 +30,25 @@
 			<td>
 				<rcp-tester></rcp-tester>
 			</td>
-		</tr>
+		</tr>		
+		<tr>
+			<td>loco-chooser</td>
+			<td></td>
+			<td>
+				<div style="min-height:50px;">
+					<loco-chooser></loco-chooser>
+				</div>
+			</td>
+		</tr>		
+		<tr>
+			<td>loco-display</td>
+			<td></td>
+			<td>
+				<div style="min-height:50px;">
+					<loco-display loco-id="LOK2"></loco-display>
+				</div>
+			</td>
+		</tr>		
 		<tr>
 			<td>loco-stop</td>
 			<td></td>
@@ -62,16 +86,16 @@
 			<td>
 			</td>
 			<td>
-				<div class="container"><loco-direction loco-id="LOK2"  direction="forward"></loco-direction></div> 	<br/>		
-					<div class="container"><loco-direction loco-id="LOK2" ></loco-direction></div> <br/>
-					<div class="container"><loco-direction loco-id="LOK2" direction="backward"></loco-direction><div><br/>
+				<div class="container"><loco-direction loco-id="LOK2"  direction="forward"></loco-direction></div><br/>		
+				<div class="container"><loco-direction loco-id="LOK2" ></loco-direction></div><br/>
+				<div class="container"><loco-direction loco-id="LOK2" direction="backward"></loco-direction><div><br/>
 			</td>
 		</tr>
 		<tr>
 			<td>loco-function</td>
 			<td></td>
 			<td>
-				 <div class="container"><loco-function loco-id="LOK2" fn="f0"></loco-function></div>
+				<div class="container"><loco-function loco-id="LOK2" fn="f0"></loco-function></div>
 				<div class="container"><loco-function loco-id="LOK2" fn="f1"></loco-function></div>
 				<div class="container"><loco-function loco-id="LOK2" fn="f2"></loco-function></div>
 				<div class="container"><loco-function loco-id="LOK2" fn="f3"></loco-function></div>

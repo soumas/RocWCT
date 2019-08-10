@@ -6,3 +6,5 @@ import './tsc_out/webcomponents/loco-throttle';
 import './tsc_out/webcomponents/power-switch';
 import './tsc_out/webcomponents/auto-switch';
 import './tsc_out/webcomponents/loco-stop';
+import './tsc_out/webcomponents/loco-chooser';
+import './tsc_out/webcomponents/loco-display';

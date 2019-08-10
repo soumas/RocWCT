@@ -7,7 +7,9 @@ export class LocoDirection extends RocWctLitElement {
 
   static get styles() {
     return [ 
-      RocWctLitElement.baseStyles
+      RocWctLitElement.baseStyles,
+      css`.btn { height: 75%; }`,
+      css`.lbl { height: 25%; overflow:hidden; width:100%; text-align: center; }`,
     ]
    ;
   }

@@ -9,7 +9,7 @@ export class LocoFunction extends RocWctLitElement {
     return [ 
       RocWctLitElement.baseStyles,
       css`.btn { height: 75%; }`,
-      css`.lbl { height: 25%; overflow:hidden; width:100%; text-align: center; font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-size: 10px; font-color:#7E888A; }`,
+      css`.lbl { height: 25%; overflow:hidden; width:100%; text-align: center; }`,
     ]
    ;
   }
@@ -31,7 +31,7 @@ export class LocoFunction extends RocWctLitElement {
     return html`${this.on != null
       ? html`<div class="btn-container">
                 <div class="btn icon ${this.on === true ? "on" : "off"}" style="-webkit-mask: url(${this.iconSetRoot}/${this.icon}) no-repeat center; mask: url(${this.iconSetRoot}/${this.icon}) no-repeat center;" @click="${this.handleClick}"></div>
-                <div class="lbl"><span>${this.text}</span></div>
+                <div class="lbl label"><span class="">${this.text}</span></div>
             </div>`
       : html``
     }`;

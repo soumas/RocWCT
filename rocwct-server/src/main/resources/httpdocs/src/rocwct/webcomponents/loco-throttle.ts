@@ -1,10 +1,9 @@
 import { html, customElement, css, property } from 'lit-element';
-import '@polymer/paper-slider/paper-slider.js';
 import { RocWctLitElement, EServerEvent, RocrailEventLc, EVMode } from '../base/rocwct-lib';
 import * as rocwct from '../rocwct';
 
 @customElement('loco-throttle')
-export class PowerSwitch extends RocWctLitElement {
+export class LocoThrottle extends RocWctLitElement {
 
   static get styles() {
     return [
@@ -54,7 +53,7 @@ export class PowerSwitch extends RocWctLitElement {
       }
 
       .control-box {
-        width: 25%;
+        width: 20%;
         float:left;
         height:25px;
       }`
@@ -136,6 +135,9 @@ export class PowerSwitch extends RocWctLitElement {
           <div class="indikator" style="height:10px;left:95%"></div>
         </div>						  
         <div class="control-container">
+          <div class="control-box">
+            <div class="btn icon off" @click="${() => this.sendCommnd(0)}" style="-webkit-mask: url(/images/iconset-default/stop.svg) no-repeat center; mask: url(/images/iconset-default/stop.svg) no-repeat center;"></div>
+          </div>	
           <div class="control-box">
             <div class="btn icon off" @click="${() => this.sendCommnd(this.vMin)}" style="-webkit-mask: url(/images/iconset-default/gauge_0.svg) no-repeat center; mask: url(/images/iconset-default/gauge_0.svg) no-repeat center;"></div>
           </div>							  

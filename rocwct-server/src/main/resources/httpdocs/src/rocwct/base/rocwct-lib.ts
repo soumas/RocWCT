@@ -8,13 +8,15 @@ export abstract class RocWctLitElement extends LitElement {
 
     static get baseStyles() {
         return [css`:host { display: block; width: 100%; height: 100%; }`,
+                css`.container { width: 100%; height: 100%;}`,
                 css`.btn-container { cursor: pointer;  width: 100%; height: 100%;}`,
                 css`.btn { cursor: pointer; width: 100%; height: 100%;}`,
                 css`.btn.off { color: #7E888A; }`,
                 css`.btn.on { color: #FCAE01; }`,
                 css`.btn.icon.off { background-color: #7E888A; }`,
                 css`.btn.icon.on { background-color: #FCAE01; }`,
-                css`.btn:active { -webkit-transform: scale(0.94); transform: scale(0.94); }`
+                css`.btn:active { -webkit-transform: scale(0.94); transform: scale(0.94); }`,
+                css`.label { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-size: 10px; font-color:#7E888A; }`
             ];
     }
 
