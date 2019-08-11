@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>Roc WebComponents Toolkit Demo</title>	
+	<title>RocWCT EasyTouch</title>	
 	<script src="/js/rocwct-bundle.js" type="module"></script>
 	<style type="text/css">
 		body {
@@ -10,32 +10,109 @@
 		}
 		
 		iframe {
-			width:650px;
-			height:350px;
+			width:990px;
+			height:450px;
 			overflow: hidden;
 			border:none;
 		}
 		
 		table {
-			width:650px;
+			width:990px;
 		}
 		
 		td {
 			text-align: center;
 		}
 		
+
+		/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto; /* 15% from the top and centered */
+  margin-top: 15px;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 250px; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
 	</style>
+	<script>		
+		document.addEventListener("DOMContentLoaded", function(event) {
+			// Get the modal
+			var modal = document.getElementById("myModal");
+
+			// Get the button that opens the modal
+			var btn = document.getElementById("myBtn");
+
+			// When the user clicks on the button, open the modal 
+			btn.onclick = function() {
+				modal.style.display = "block";
+			}
+
+			// When the user clicks anywhere outside of the modal, close it
+			window.onclick = function(event) {
+				if (event.target == modal) {
+					modal.style.display = "none";
+				}
+			}
+
+			document.getElementById("chooser").addEventListener("onLocoChange", (e) => { 
+				modal.style.display = "none";
+				var lococontrols = document.getElementsByClassName("lococontrol");
+				for(var i = 0; i < lococontrols.length; i++)
+				{
+					lococontrols.item(i).setAttribute('loco-id', e.detail.locoid);
+				}
+			});
+
+  		});		
+	</script>
 </head>
 <body>
 	<iframe src="http://192.168.113.104/" scrolling="no">
 	</iframe>
 	<table style="border:solid 1px #CCCCCC">
 		<tr>
-			<td style="height:50px;"><loco-throttle loco-id="V200" ></loco-throttle></td>			
-			<td style="height:50px;width:40px;"><loco-direction loco-id="V200" direction="backward"></loco-direction></td>
-			<td style="height:50px;width:200px;"><loco-display loco-id="V200"></loco-stop></td>
-			<td style="height:50px;width:40px;"><loco-direction loco-id="V200" direction="forward"></loco-direction></td>
+			<td style="height:100px;width:50px;"><loco-direction class="lococontrol" direction="backward"></loco-direction></td>
+			<td style="height:100px;width:200px;"><loco-display class="lococontrol" id="myBtn" style="cursor: pointer"></loco-display></td>
+			<td style="height:100px;width:50px;"><loco-direction class="lococontrol" direction="forward"></loco-direction></td>
+			<td style="padding-left:40px;padding-right:40px;"><loco-throttle class="lococontrol" ></loco-throttle></td>			
+			<td style="height:100px;width:50px;padding-right:30px;"><loco-function class="lococontrol" fn="f0" ></loco-function></td>
 		</tr>
-	</table>
+	</table>	
+	<div id="myModal" class="modal">
+		<div class="modal-content">
+		  <p><loco-chooser id="chooser" ></loco-chooser></p>
+		</div>		  
+	</div>
+
 </body>
 </html>

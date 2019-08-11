@@ -80,7 +80,7 @@ export class LocoThrottle extends RocWctLitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.registerServerEvent(EServerEvent.lc, this.locoId, res => this.onServerEventLc(res));
+    this.registerServerEvent(EServerEvent.lc, res => this.onServerEventLc(res));
     this.sendInitCommand();
   }
   
@@ -158,8 +158,19 @@ export class LocoThrottle extends RocWctLitElement {
   sendCommnd(speed: number) {
     rocwct.send(`<lc id="${this.locoId}" V="${speed}" controlcode="" slavecode="" />`);    
   }
+
+  updated(changedProperties : Map<string,any>) {
+    if(changedProperties.has('locoId')) {
+      this.sendInitCommand();
+    }
+  }
   
   onServerEventLc(event:RocrailEventLc) {    
+
+    if(event.lc.id !== this.locoId) {
+      return;
+    }
+
     if(!isNaN(event.lc.V_min)) {
       // if event.lc.V_min is a number... use it as new cfgVMin
       this.cfgVMin = event.lc.V_min;

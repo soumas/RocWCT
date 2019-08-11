@@ -14,17 +14,17 @@ export class LocoDirection extends RocWctLitElement {
    ;
   }
 
-  @property({ type : Boolean })  forward = null;
-  @property({ type : String })  icon = null;
-  @property({ type : String })  on = null;
   @property({ type : String, attribute : "loco-id" }) locoId = null;
   @property({ type : String, attribute : "direction" }) direction = null;
   @property({ type : String, attribute : "icon-forward" }) iconForward = "chevron-right.svg";
   @property({ type : String, attribute : "icon-backward" }) iconBackward = "chevron-left.svg";
+  @property({ type : Boolean })  forward = null;
+  @property({ type : String })  icon = null;
+  @property({ type : String })  on = null;
 
   connectedCallback() {
     super.connectedCallback();
-    this.registerServerEvent(EServerEvent.lc, this.locoId, res => this.onServerEvent(res));
+    this.registerServerEvent(EServerEvent.lc, res => this.onServerEvent(res));
     this.sendInitCommand();
   }
     
@@ -37,6 +37,12 @@ export class LocoDirection extends RocWctLitElement {
     }`;
   }
 
+  updated(changedProperties : Map<string,any>) {
+    if(changedProperties.has('locoId')) {
+      this.sendInitCommand();
+    }
+  }
+
   handleClick() {  
     this.sendDirCmd();
   }
@@ -47,6 +53,9 @@ export class LocoDirection extends RocWctLitElement {
   }  
 
   onServerEvent(event:RocrailEventLc) {
+    if(event.lc.id !== this.locoId) {
+      return;
+    }
     this.forward = event.lc.dir;
     this.updateButtonState();
   }

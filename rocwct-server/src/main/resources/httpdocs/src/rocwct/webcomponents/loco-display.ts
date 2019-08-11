@@ -15,13 +15,14 @@ export class LocoDisplay extends RocWctLitElement {
   }
 
   @property({ type : String, attribute : "loco-id" }) locoId = null;
+  @property({ type : String, attribute : "show-label" }) showLabel = 'true';
   @property({ type : String }) locoImage = null;
   @property({ type : String }) locoAddr = null;
   @property({ type : String }) locoDescription = null;
 
   connectedCallback() {
     super.connectedCallback();
-    this.registerServerEvent(EServerEvent.lc, this.locoId, res => this.onServerEvent(res));
+    this.registerServerEvent(EServerEvent.lc, res => this.onServerEvent(res));
     this.sendInitCommand();
   }
     
@@ -30,18 +31,28 @@ export class LocoDisplay extends RocWctLitElement {
       ? html`
         <div class="container">
           <div><img src="/images/rocrail/${this.locoImage}" alt="${this.locoId}" title="${this.locoId}" /></div>
-          <div><span class="label">${this.locoId} (${this.locoAddr}), ${this.locoDescription}</div></div>
+          <div style="display:${this.showLabel === 'true' ? 'block' : 'none'}"><span class="label">${this.locoId} (${this.locoAddr}), ${this.locoDescription}</div></div>
         </div>`
       : html``
     }`;
   }
 
+  updated(changedProperties : Map<string,any>) {
+    if(changedProperties.has('locoId')) {
+      this.sendInitCommand();
+    }
+  }
+
   sendInitCommand() {    
-    //rocwct.send(`<lc id="${this.locoId}"  />`); 
     rocwct.send(`<model cmd="lcprops" />`); 
   }  
 
   onServerEvent(e:RocrailEventLc) {
+
+    if(e.lc.id !== this.locoId) {
+      return;
+    }
+
     this.executeIfNotUndefined(e.lc.image, (val : string) => { this.locoImage = val });
     this.executeIfNotUndefined(e.lc.addr, (val : string) => { this.locoAddr = val });
     this.executeIfNotUndefined(e.lc.desc, (val : string) => { this.locoDescription = val });

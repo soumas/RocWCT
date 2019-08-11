@@ -17,7 +17,7 @@ export class AutoSwitch extends RocWctLitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.registerServerEvent(EServerEvent.auto, null, res => this.onServerEvent(res));
+    this.registerServerEvent(EServerEvent.auto, res => this.onServerEvent(res));
     this.sendInitCommand();
   }
 

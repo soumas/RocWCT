@@ -17,7 +17,7 @@ export class PowerSwitch extends RocWctLitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.registerServerEvent(EServerEvent.state, null, res => this.onServerEvent(res));
+    this.registerServerEvent(EServerEvent.state, res => this.onServerEvent(res));
     this.sendInitCommand();
   }
     

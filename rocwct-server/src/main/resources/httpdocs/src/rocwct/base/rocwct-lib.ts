@@ -26,11 +26,10 @@ export abstract class RocWctLitElement extends LitElement {
         super();
     }
 
-    registerServerEvent(event : EServerEvent, id? : string, serverEventHandler? : IServerEventCallback) {
+    registerServerEvent(event : EServerEvent, serverEventHandler? : IServerEventCallback) {
         let evnt : ServerEventSubscription = new ServerEventSubscription();
         evnt.element = this;
         evnt.event = event;
-        evnt.id = id;
         evnt.onServerEvent = serverEventHandler;
         rocwct.subscribe(evnt);
       }
