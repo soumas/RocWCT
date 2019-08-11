@@ -8,3 +8,4 @@ import './tsc_out/webcomponents/auto-switch';
 import './tsc_out/webcomponents/loco-stop';
 import './tsc_out/webcomponents/loco-chooser';
 import './tsc_out/webcomponents/loco-display';
+import './tsc_out/webcomponents/loco-auto-switch';
