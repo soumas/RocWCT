@@ -15,6 +15,8 @@ export class LocoAutoSwitch extends RocWctLitElement {
   }
 
   @property({ type : String, attribute : "loco-id" }) locoId = null;
+  @property({ type : Boolean, attribute : "activate-global-auto" }) activateGlobalAuto = false;
+  @property({ type : Boolean, attribute : "start-stop-loco" }) startStopLoco = false;
   @property({ type : String })  icon = "auto-mode.svg";
   @property({ type : String })  manual = null;
 
@@ -55,13 +57,23 @@ export class LocoAutoSwitch extends RocWctLitElement {
   }
 
   sendDirCmd() : void {
-    let manualVal : string = '';
+    let activateAutoMode : Boolean = false;
     if(this.manual === true) {
-      manualVal = "resetmanualmode";
+      activateAutoMode = true;
     } else {
-      manualVal = "setmanualmode";
+      activateAutoMode = false;
     }
-    rocwct.send(`<lc id="${this.locoId}" cmd="${manualVal}" />`); 
+
+    // activate global auto mode (if specified by attribute)
+    if(this.activateGlobalAuto === true && activateAutoMode === true) {
+      rocwct.send(`<auto cmd="on" />`); 
+    }
+    // activate loco auto mode
+    rocwct.send(`<lc id="${this.locoId}" cmd="${activateAutoMode === true ? 'resetmanualmode' : 'setmanualmode'}" controlcode="" slavecode="" />`); 
+    // trigger go-/stop-command
+    if(this.startStopLoco === true) {
+        rocwct.send(`<lc id="${this.locoId}" cmd="${activateAutoMode === true ? 'go' : 'stop'}" controlcode="" slavecode="" />`); 
+    }
   }
 
 }

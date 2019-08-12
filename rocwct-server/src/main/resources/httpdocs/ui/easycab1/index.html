@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>RocWCT - Easy Cab One</title>
+	<link rel="icon" href="/favicon.ico" >
+	<link rel="stylesheet" type="text/css" href="style.css?v=2">
+</head>
+
+<body>
+	<iframe id="rocwebiframe" src="" scrolling="no">
+	</iframe>
+	<table id="controlbar"> 
+		<tr>
+			<td style="height:100px;width:50px;padding-left: 10px;">
+				<loco-direction class="lococontrol" direction="backward"></loco-direction>
+			</td>
+			<td style="height:100px;width:200px;">
+				<loco-display class="lococontrol" id="myBtn" style="cursor: pointer"></loco-display>
+			</td>
+			<td style="height:100px;width:50px;">
+				<loco-direction class="lococontrol" direction="forward"></loco-direction>
+			</td>
+			<td style="padding-left:40px;padding-right:30px;">
+				<loco-throttle class="lococontrol"></loco-throttle>
+			</td>
+			<td style="height:100px;width:50px;padding-right:30px;">
+				<loco-function class="lococontrol" fn="f0" show-label="false"></loco-function>
+			</td>
+			<td style="height:100px;width:50px;padding-right:30px;">
+				<loco-auto-switch class="lococontrol" activate-global-auto="true" start-stop-loco="true"></loco-auto-switch>
+			</td>
+		</tr>
+	</table>
+	<div id="myModal" class="modal">
+		<div class="modal-content">
+			<p>
+				<loco-chooser id="chooser"></loco-chooser>
+			</p>
+		</div>
+	</div>
+	<div id="tableToggler"></div>
+
+	<script src="/js/rocwct-bundle.js" type="module"></script>
+	<script src="app.js" type="module"></script>
+</body>
+
+</html>
