@@ -41,7 +41,7 @@ export class LocoThrottle extends RocWctLitElement {
       .control-box {
         width: 20%;
         float:left;
-        height:25px;
+        height:35px;
       }`
     ]
       ;
@@ -67,7 +67,6 @@ export class LocoThrottle extends RocWctLitElement {
   connectedCallback() {
     super.connectedCallback();
     this.registerServerEvent(EServerEvent.lc, res => this.onServerEventLc(res));
-    this.sendInitCommand();
   }
   
   sendInitCommand() {    

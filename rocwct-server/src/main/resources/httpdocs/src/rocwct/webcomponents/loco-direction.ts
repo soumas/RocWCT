@@ -25,7 +25,6 @@ export class LocoDirection extends RocWctLitElement {
   connectedCallback() {
     super.connectedCallback();
     this.registerServerEvent(EServerEvent.lc, res => this.onServerEvent(res));
-    this.sendInitCommand();
   }
     
   render() {

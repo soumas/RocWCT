@@ -70,4 +70,5 @@ td {
     height: 25px;
     background: url(./images/hide.png);
     z-index: 1;
+    cursor: pointer;
 }

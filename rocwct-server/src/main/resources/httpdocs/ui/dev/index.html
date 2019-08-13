@@ -10,14 +10,8 @@
 			height: 48px;
 		}
 	</style>
-	<script>
-		function doIt() {
-			document.getElementById("locostop").setAttribute("loco-id","V200");
-		};
-	</script>
 </head>
 <body>
-	<button id="xxx" onclick="javasript:doIt();">loco-id auf V200 setzen (loco-stop)</button>
 	<table border="1">
 		<tr>
 			<td>Component</td>
@@ -31,6 +25,13 @@
 				<rcp-tester></rcp-tester>
 			</td>
 		</tr>		
+		<tr>
+			<td>loco-auto-switch</td>
+			<td></td>
+			<td>
+				<div class="container"><loco-auto-switch loco-id="LOK2"></loco-auto-switch></div>				
+			</td>
+		</tr>	
 		<tr>
 			<td>loco-chooser</td>
 			<td></td>

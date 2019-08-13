@@ -43,7 +43,7 @@ export class AutoSwitch extends RocWctLitElement {
   }
 
   sendCmd() : void {
-    let cmd : string = `<auto cmd="${this.on === true ? "off" : "on"}" />`;
+    let cmd : string = `<auto cmd="${this.on === true ? "off" : "on"}"  controlcode="" slavecode="" />`;
     rocwct.send(cmd); 
   }
 

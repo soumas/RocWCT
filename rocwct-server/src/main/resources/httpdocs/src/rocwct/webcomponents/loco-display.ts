@@ -15,15 +15,15 @@ export class LocoDisplay extends RocWctLitElement {
   }
 
   @property({ type : String, attribute : "loco-id" }) locoId = null;
-  @property({ type : String, attribute : "show-label" }) showLabel = 'true';
+  @property({ type : Boolean, attribute : "show-description" }) showDescr = 'true';
   @property({ type : String }) locoImage = null;
   @property({ type : String }) locoAddr = null;
   @property({ type : String }) locoDescription = null;
+  @property({ type : String }) locoMode = null;
 
   connectedCallback() {
     super.connectedCallback();
     this.registerServerEvent(EServerEvent.lc, res => this.onServerEvent(res));
-    this.sendInitCommand();
   }
     
   render() {
@@ -31,7 +31,7 @@ export class LocoDisplay extends RocWctLitElement {
       ? html`
         <div class="container">
           <div><img src="/images/rocrail/${this.locoImage}" alt="${this.locoId}" title="${this.locoId}" /></div>
-          <div style="display:${this.showLabel === 'true' ? 'block' : 'none'}"><span class="label">${this.locoId} (${this.locoAddr}), ${this.locoDescription}</div></div>
+          <div><span class="label">${this.locoId} (${this.locoAddr}) [${this.locoMode}]</span> <span style="display:${this.showDescr === 'true' ? '' : 'none'};" class="label">, ${this.locoDescription}</span></div>
         </div>`
       : html``
     }`;
@@ -56,6 +56,7 @@ export class LocoDisplay extends RocWctLitElement {
     this.executeIfNotUndefined(e.lc.image, (val : string) => { this.locoImage = val });
     this.executeIfNotUndefined(e.lc.addr, (val : string) => { this.locoAddr = val });
     this.executeIfNotUndefined(e.lc.desc, (val : string) => { this.locoDescription = val });
+    this.executeIfNotUndefined(e.lc.mode, (val : string)  => { this.locoMode = val });
   }
 
   executeIfNotUndefined(val : any, func : Function) {

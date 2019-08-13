@@ -16,24 +16,26 @@ export class LocoFunction extends RocWctLitElement {
 
   defaultIcon : string = "lens.svg";
   @property({ type : Boolean })  on = null;
-  @property({ type : String, attribute : "show-label" }) showLabel = 'true';
-  @property({ type : String, attribute : "text" }) text = null;  
-  @property({ type : String, attribute : "icon" }) icon = this.defaultIcon;
   @property({ type : String, attribute : "loco-id" }) locoId = "";
+  @property({ type : String, attribute : "show-label" }) showLabel = 'true';
+  @property({ type : String, attribute : "label" }) attrLabel = null;  
+  @property({ type : String, attribute : "icon" }) attrIcon = null;
+  @property({ type : String, attribute : "icon-extension" }) attrIconExtension = null;
   @property({ type : String, attribute : "fn" }) fn = "";
+  @property({ type : String }) iconCalculated = "";
+  @property({ type : String }) labelCalculated = "";
 
   connectedCallback() {
     super.connectedCallback();
     this.registerServerEvent(EServerEvent.fn, res => this.onServerEvent(res));
     this.registerServerEvent(EServerEvent.lc, res => this.onInitialServerEvent(res));
-    this.sendInitCommand();
   }
     
   render() {
     return html`${this.on != null
       ? html`<div class="btn-container">
-                <div class="btn icon ${this.on === true ? "on" : "off"}" style="-webkit-mask: url(${this.iconSetRoot}/${this.icon}) no-repeat center; mask: url(${this.iconSetRoot}/${this.icon}) no-repeat center;" @click="${this.handleClick}"></div>
-                <div class="lbl label" style="display:${this.showLabel === 'true' ? 'block' : 'none'}"><span class="">${this.text}</span></div>
+                <div class="btn icon ${this.on === true ? "on" : "off"}" style="-webkit-mask: url(${this.iconSetRoot}/${this.iconCalculated}) no-repeat center; mask: url(${this.iconSetRoot}/${this.iconCalculated}) no-repeat center;" @click="${this.handleClick}"></div>
+                <div class="lbl label" style="display:${this.showLabel === 'true' ? 'block' : 'none'}"><span class="">${this.labelCalculated}</span></div>
             </div>`
       : html``
     }`;
@@ -62,50 +64,57 @@ export class LocoFunction extends RocWctLitElement {
       return;
     }
 
-      // on/off state
-      let funcOn : boolean = false;
-      let myPos : number =  this.extractFunctionNumber();
-      if(myPos === 0) {
-          funcOn = loco.fn;
-        } else {
-          let binRep : string = (loco.fx >>> 0).toString(2);
-          if(myPos <= binRep.length) {
-            funcOn = binRep.substr(binRep.length-myPos, 1) === "1";
-          }
-      } 
-      this.on = funcOn;
-
-      // text & icon (fundef)
-      if(loco.fundef) {
-        // select the fundef-element for current function the fundef node may be an 
-        // instance of Fundef or an array (if multiple definitions are available)
-        let fundefElem : Fundef = null;
-        if(Array.isArray(loco.fundef)) {
-          loco.fundef.forEach(fndf => {
-            if(fndf.fn === this.extractFunctionNumber()) {
-              fundefElem = fndf;
-            }
-          });
-        } else {
-          fundefElem = (loco.fundef);
+    // on/off state
+    let funcOn : boolean = false;
+    let myPos : number =  this.extractFunctionNumber();
+    if(myPos === 0) {
+        funcOn = loco.fn;
+      } else {
+        let binRep : string = (loco.fx >>> 0).toString(2);
+        if(myPos <= binRep.length) {
+          funcOn = binRep.substr(binRep.length-myPos, 1) === "1";
         }
+    } 
+    this.on = funcOn;
 
-        if(fundefElem != null) {
-          if(fundefElem.text && fundefElem.text.trim().length>0) {
-            this.text = fundefElem.text;
+    // search for fundef-element if icon or text not specified in attributes
+    let fundefElem : Fundef = null;
+    if(loco.fundef) {
+      // select the fundef-element for current function the fundef node may be an 
+      // instance of Fundef or an array (if multiple definitions are available)
+      if(Array.isArray(loco.fundef)) {
+        loco.fundef.forEach(fndf => {
+          if(fndf.fn === this.extractFunctionNumber()) {
+            fundefElem = fndf;
           }
-          if(fundefElem.icon && fundefElem.icon.length > 0) {
-            this.icon = fundefElem.icon;
-          }
-        } else {
-          this.text = "";
-          this.icon = this.defaultIcon;
-        }
+        });
+      } else {
+        fundefElem = (loco.fundef);
+      }
 
-        if(!this.text || this.text.trim().length===0) {
-          this.text = this.fn.toUpperCase();
+      
+      // set icon
+      if(this.attrIcon !== null) {
+        this.iconCalculated = this.attrIcon;
+      } else if(fundefElem !== null && fundefElem.icon && fundefElem.icon.length > 0) {
+        this.iconCalculated = fundefElem.icon;
+        if(this.attrIconExtension !== null) {
+          this.iconCalculated = this.iconCalculated + this.attrIconExtension;
         }
-      };
+      } else {
+        this.iconCalculated = this.defaultIcon;
+      }
+
+      // set text
+      if(this.attrLabel !== null) {
+        this.labelCalculated = this.attrLabel      
+      } else if(fundefElem !== null && fundefElem.text && fundefElem.text.trim().length>0) {
+        this.labelCalculated = fundefElem.text;
+      } else {
+        this.labelCalculated = this.fn.toUpperCase();
+      }
+
+    }  
   }
 
   onServerEvent(event : RocrailEventFn) {
