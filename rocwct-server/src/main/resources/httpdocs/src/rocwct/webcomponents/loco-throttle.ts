@@ -1,13 +1,15 @@
 import { html, customElement, css, property } from 'lit-element';
-import { RocWctLitElement, EServerEvent, RocrailEventLc, EVMode } from '../base/rocwct-lib';
+import { RocWctLitElement, EServerEvent, RocrailEventLc, EVMode, RocWctLocoDependentElement } from '../base/rocwct-lib';
 import * as rocwct from '../rocwct';
 
 @customElement('loco-throttle')
-export class LocoThrottle extends RocWctLitElement {
+export class LocoThrottle extends RocWctLocoDependentElement {
 
   static get styles() {
     return [
-      RocWctLitElement.baseStyles,
+      RocWctLocoDependentElement.stylesRocWctLocoDependentElement,
+      css`input[type="button"] { cursor:pointer; width:100%; height: 100%; border: none; text-align: center; }`,
+      css`input[type="button"].on { background-color: #FCAE01;}`,
       css`	
       .slider {
         -webkit-appearance: none;  /* Override default CSS styles */
@@ -47,7 +49,7 @@ export class LocoThrottle extends RocWctLitElement {
       ;
   }
 
-  @property({ type : String, attribute : "loco-id" }) locoId = "";  
+  @property({ type : String, attribute : "loco-id" }) locoId = null;  
   @property({ type: Number }) sliderMax = null;
   @property({ type: Number }) vCurrent = null;
   @property({ type: EVMode }) vMode = null;
@@ -66,7 +68,7 @@ export class LocoThrottle extends RocWctLitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.registerServerEvent(EServerEvent.lc, res => this.onServerEventLc(res));
+    this.registerServerEvent(EServerEvent.lc, res => this.handleLocoEvent(res, e => this.onServerEventLc(e)));
   }
   
   sendInitCommand() {    
@@ -79,19 +81,19 @@ export class LocoThrottle extends RocWctLitElement {
         <input type="range" min="0" step="1" max="${this.sliderMax}" .value="${this.vCurrent}" @change="${(e) => this.sendCommnd(e.target.value)}" class="slider" > 			  
         <div class="control-container">
           <div class="control-box">
-            <div class="btn icon off" @click="${() => this.sendCommnd(0)}" style="-webkit-mask: url(/images/iconset-default/stop.svg) no-repeat center; mask: url(/images/iconset-default/stop.svg) no-repeat center;"></div>
+            <input @click="${() => this.sendCommnd(0)}" class="${this.vCurrent <= 0 ? 'on' : ''}" title="Stop" type="button" style="-webkit-mask: url(/images/iconset-default/stop.svg) no-repeat center; mask: url(/images/iconset-default/stop.svg) no-repeat center;" />            
           </div>	
           <div class="control-box">
-            <div class="btn icon off" @click="${() => this.sendCommnd(this.vMin)}" style="-webkit-mask: url(/images/iconset-default/gauge_0.svg) no-repeat center; mask: url(/images/iconset-default/gauge_0.svg) no-repeat center;"></div>
+            <input @click="${() => this.sendCommnd(this.vMin)}" class="${this.vCurrent > 0 && this.vCurrent <= this.vMin ? 'on' : ''}" title="Vmin" type="button" style="-webkit-mask: url(/images/iconset-default/gauge_0.svg) no-repeat center; mask: url(/images/iconset-default/gauge_0.svg) no-repeat center;" />
           </div>							  
           <div class="control-box">
-            <div class="btn icon off" @click="${() => this.sendCommnd(this.vMid)}" style="-webkit-mask: url(/images/iconset-default/gauge_1.svg) no-repeat center; mask: url(/images/iconset-default/gauge_1.svg) no-repeat center;"></div>
+            <input @click="${() => this.sendCommnd(this.vMid)}" class="${this.vCurrent > this.vMin && this.vCurrent < this.vCru ? 'on' : ''}" title="Vmid" type="button" style="-webkit-mask: url(/images/iconset-default/gauge_1.svg) no-repeat center; mask: url(/images/iconset-default/gauge_1.svg) no-repeat center;" />
           </div>					  
           <div class="control-box">
-            <div class="btn icon off" @click="${() => this.sendCommnd(this.vCru)}" style="-webkit-mask: url(/images/iconset-default/gauge_2.svg) no-repeat center; mask: url(/images/iconset-default/gauge_2.svg) no-repeat center;"></div>
+            <input @click="${() => this.sendCommnd(this.vCru)}" class="${this.vCurrent >= this.vCru && this.vCurrent < this.vMax ? 'on' : ''}" title="Vcruise" type="button" style="-webkit-mask: url(/images/iconset-default/gauge_2.svg) no-repeat center; mask: url(/images/iconset-default/gauge_2.svg) no-repeat center;" />
           </div>					  
           <div class="control-box">
-            <div class="btn icon off" @click="${() => this.sendCommnd(this.vMax)}" style="-webkit-mask: url(/images/iconset-default/gauge_3.svg) no-repeat center; mask: url(/images/iconset-default/gauge_3.svg) no-repeat center;"></div>
+            <input @click="${() => this.sendCommnd(this.vMax)}" class="${this.vCurrent >= this.vMax ? 'on' : ''}" title="Vmax" type="button" style="-webkit-mask: url(/images/iconset-default/gauge_3.svg) no-repeat center; mask: url(/images/iconset-default/gauge_3.svg) no-repeat center;" />
           </div>
         </div>`
         : html``
@@ -102,10 +104,8 @@ export class LocoThrottle extends RocWctLitElement {
     rocwct.send(`<lc id="${this.locoId}" V="${speed}" controlcode="" slavecode="" />`);    
   }
 
-  updated(changedProperties : Map<string,any>) {
-    if(changedProperties.has('locoId')) {
-      this.sendInitCommand();
-    }
+  protected onLocoIdChange(): void {
+    this.sendInitCommand();
   }
   
   onServerEventLc(event:RocrailEventLc) {    

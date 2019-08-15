@@ -1,4 +1,5 @@
-import { LitElement, css } from 'lit-element';
+import { LitElement, html, customElement, css, property } from 'lit-element';
+import { RocrailEventLc }  from '../base/rocwct-lib';
 import * as rocwct from '../rocwct';
 
 /***********************************************************/
@@ -6,18 +7,10 @@ import * as rocwct from '../rocwct';
 /***********************************************************/
 export abstract class RocWctLitElement extends LitElement {
 
-    static get baseStyles() {
-        return [css`:host { display: block; width: 100%; height: 100%; }`,
-                css`.container { width: 100%; height: 100%;}`,
-                css`.btn-container { cursor: pointer;  width: 100%; height: 100%;}`,
-                css`.btn { cursor: pointer; width: 100%; height: 100%;}`,
-                css`.btn.off { color: #7E888A; }`,
-                css`.btn.on { color: #FCAE01; }`,
-                css`.btn.icon.off { background-color: #7E888A; }`,
-                css`.btn.icon.on { background-color: #FCAE01; }`,
-                css`.btn:active { -webkit-transform: scale(0.94); transform: scale(0.94); }`,
-                css`.label { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-size: 10px; font-color:#7E888A; }`
-            ];
+    static get stylesRocWctLitElement() {
+        return [
+            css`:host { display: block; width: 100%; height: 100%;font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-size: 10px; color: #7E888A }`,
+        ];
     }
 
     protected iconSetRoot : string = "/images/iconset-default";
@@ -33,6 +26,102 @@ export abstract class RocWctLitElement extends LitElement {
         evnt.onServerEvent = serverEventHandler;
         rocwct.subscribe(evnt);
       }
+}
+
+export abstract class RocWctLocoDependentElement extends RocWctLitElement {
+
+    static get stylesRocWctLocoDependentElement() {
+        return [ 
+          RocWctLitElement.stylesRocWctLitElement
+        ];
+    }
+
+    protected abstract locoId: String;
+    protected abstract onLocoIdChange() : void;
+
+    updated(changedProperties : Map<string,any>) {
+        if(changedProperties.has('locoId')) {
+          this.onLocoIdChange();
+        }
+    }
+
+    handleLocoEvent(event : RocrailEventLc, callback: ILocoEventCallback) {
+        if(event.lc.id !== this.locoId) {
+            return;
+        }
+        callback(event);
+    }
+}
+
+export abstract class RocWctButton extends RocWctLitElement {
+
+    static get stylesRocWctButton() {
+        return [ 
+          RocWctLitElement.stylesRocWctLitElement,
+          css`input[type="button"] { cursor:pointer; width:100%; height: 70%; border: none; text-align: center; }`,
+          css`input[type="button"] + div { width:100%; min-height: 30%; text-align: center; cursor:pointer; }`,
+          css`input[type="button"].on { background-color: #FCAE01; }`,
+          css`input[type="button"]:active { -webkit-transform: scale(0.94); transform: scale(0.94); }`,
+          css`input[type="button"]:disabled { cursor: default; opacity: 0.4; -webkit-transform: none; transform: none;}`,
+          css`input[type="button"]:disabled + div { cursor: default; opacity: 0.4; }`
+        ];
+    }
+  
+    @property({ type : Boolean })  on = null;
+    @property({ type : Boolean, attribute : "hide-label" }) hideLabel = false;
+    @property({ type : Boolean, attribute : "disabled" }) disabled = false;     
+
+    protected abstract label: String;
+    protected abstract icon: String;
+    protected abstract handleClick() : void;
+
+    constructor() {
+        super();
+    }
+
+    render() {
+        return html`${this.on != null
+          ? html`<input id="btn" @click="${this.handleClickInternal}" title="${this.label}${this.disabled ? " (inaktiv)" : ""}" type="button" ?disabled="${this.disabled === true}" class="${this.on === true ? "on" : ""}" style="-webkit-mask: url(${this.iconSetRoot}/${this.icon}) no-repeat center; mask: url(${this.iconSetRoot}/${this.icon}) no-repeat center;"   />
+                 <div @click="${this.handleClickInternal}"><label for="btn" style="display:${this.hideLabel === true ? 'none' : ''}" >${this.label}</label></div>`
+          : html``
+        }`;
+      }
+    
+    private handleClickInternal() {
+        if(this.disabled === true) {
+            return;
+        }
+        this.handleClick();
+    }    
+}
+
+export abstract class RocWctLocoDependentButton extends RocWctButton {
+
+    static get stylesRocWctLocoDependentButton() {
+        return [ 
+            RocWctButton.stylesRocWctButton,
+        ];
+    }
+
+    protected abstract locoId: String;
+    protected abstract onLocoIdChange() : void;
+
+    updated(changedProperties : Map<string,any>) {
+        if(changedProperties.has('locoId')) {
+          this.onLocoIdChange();
+        }
+    }
+
+    handleLocoEvent(event : RocrailEventLc, callback: ILocoEventCallback) {
+        if(event.lc.id !== this.locoId) {
+            return;
+        }
+        callback(event);
+    }
+}
+
+export interface ILocoEventCallback  {
+    (event : RocrailEventLc) : void;
 }
 
 /***********************************************************/

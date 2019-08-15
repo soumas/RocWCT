@@ -7,9 +7,9 @@ export class LocoChooser extends RocWctLitElement {
 
   static get styles() {
     return [
-      RocWctLitElement.baseStyles,
-      css`.locobox { padding:4px; }`,
-      css`.selected { border:solid 2px #FCAE01; }`,
+      RocWctLitElement.stylesRocWctLitElement,
+      css`.locobox { padding:4px; cursor:pointer; }`,
+      css`.selected { border:solid 2px #FCAE01; padding:2px;  }`,
     ];
   }
 

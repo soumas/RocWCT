@@ -1,15 +1,13 @@
 import { html, customElement, css, property } from 'lit-element';
-import { RocWctLitElement, EServerEvent, RocrailEventLc }  from '../base/rocwct-lib';
+import { RocWctLitElement, EServerEvent, RocrailEventLc, RocWctLocoDependentButton }  from '../base/rocwct-lib';
 import * as rocwct from '../rocwct';
 
 @customElement('loco-direction')
-export class LocoDirection extends RocWctLitElement {
+export class LocoDirection extends RocWctLocoDependentButton {
 
   static get styles() {
     return [ 
-      RocWctLitElement.baseStyles,
-      css`.btn { height: 75%; }`,
-      css`.lbl { height: 25%; overflow:hidden; width:100%; text-align: center; }`,
+      RocWctLocoDependentButton.stylesRocWctLocoDependentButton,
     ]
    ;
   }
@@ -18,28 +16,19 @@ export class LocoDirection extends RocWctLitElement {
   @property({ type : String, attribute : "direction" }) direction = null;
   @property({ type : String, attribute : "icon-forward" }) iconForward = "chevron-right.svg";
   @property({ type : String, attribute : "icon-backward" }) iconBackward = "chevron-left.svg";
+  @property({ type : String, attribute : "label-forward" }) labelForward = "Vorwärts";
+  @property({ type : String, attribute : "label-backward" }) labelBackward = "Rückwärts";
   @property({ type : Boolean })  forward = null;
   @property({ type : String })  icon = null;
-  @property({ type : String })  on = null;
+  @property({ type : String })  label = null;
 
   connectedCallback() {
     super.connectedCallback();
-    this.registerServerEvent(EServerEvent.lc, res => this.onServerEvent(res));
-  }
-    
-  render() {
-    return html`${this.forward != null
-      ? html`<div class="btn-container">
-                <div class="btn icon ${this.on === true ? "on" : "off"}" style="-webkit-mask: url(${this.iconSetRoot}/${this.icon}) no-repeat center; mask: url(${this.iconSetRoot}/${this.icon}) no-repeat center;" @click="${this.handleClick}"></div>
-            </div>`
-      : html``
-    }`;
-  }
+    this.registerServerEvent(EServerEvent.lc, res =>  this.handleLocoEvent(res, e => this.onServerEvent(e)));
+  }    
 
-  updated(changedProperties : Map<string,any>) {
-    if(changedProperties.has('locoId')) {
-      this.sendInitCommand();
-    }
+  onLocoIdChange(): void {
+    this.sendInitCommand();
   }
 
   handleClick() {  
@@ -47,18 +36,31 @@ export class LocoDirection extends RocWctLitElement {
   }
 
   sendInitCommand() {    
-    // empty lc-command triggers server event with current state of loco
-    rocwct.send(`<lc id="${this.locoId}"  />`); 
+    // trigger empty lc command results in statusinf for specific loco
+    rocwct.send(`<lc id="${this.locoId}"  />`);
   }  
 
   onServerEvent(event:RocrailEventLc) {
-    if(event.lc.id !== this.locoId) {
-      return;
-    }
     this.forward = event.lc.dir;
     this.updateButtonState();
   }
 
+  updateButtonState() {
+    if(this.direction === 'forward') {
+      this.on = this.forward === true;
+      this.icon = this.iconForward;
+      this.label = this.labelForward;
+    } else if(this.direction === 'backward') {
+      this.on = this.forward === false;
+      this.icon = this.iconBackward;
+      this.label = this.labelBackward;
+    } else {
+      this.on = true;
+      this.icon = (this.forward === true) ? this.iconForward : this.iconBackward;
+      this.label = (this.forward === true) ? this.labelForward : this.labelBackward;
+    }
+  }
+  
   sendDirCmd() : void {
     let dirval : string = '';
     if(this.direction === 'forward') {
@@ -69,19 +71,6 @@ export class LocoDirection extends RocWctLitElement {
       dirval = this.forward === true ? "false" : "true";
     }
     rocwct.send(`<lc id="${this.locoId}" dir="${dirval}" />`); 
-  }
-
-  updateButtonState() {
-    if(this.direction === 'forward') {
-      this.icon = this.iconForward;
-      this.on = this.forward === true;
-    } else if(this.direction === 'backward') {
-      this.icon = this.iconBackward;
-      this.on = this.forward === false;
-    } else {
-      this.icon = (this.forward === true) ? this.iconForward : this.iconBackward;
-      this.on = true;
-    }
   }
 
 }

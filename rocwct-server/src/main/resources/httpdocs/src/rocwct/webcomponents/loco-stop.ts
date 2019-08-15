@@ -1,36 +1,42 @@
-import { html, customElement, css, property } from 'lit-element';
-import { RocWctLitElement, EServerEvent, RocrailEventLc }  from '../base/rocwct-lib';
+import { customElement, property, html } from 'lit-element';
+import { RocWctLocoDependentButton, EServerEvent, RocrailEventLc }  from '../base/rocwct-lib';
 import * as rocwct from '../rocwct';
 
 @customElement('loco-stop')
-export class LocoStop extends RocWctLitElement {
+export class LocoStop extends RocWctLocoDependentButton {
 
   static get styles() {
     return [ 
-      RocWctLitElement.baseStyles
+      RocWctLocoDependentButton.stylesRocWctLocoDependentButton
     ]
    ;
   }
 
-  @property({ type : String, attribute : "icon" }) icon = "stop_arrow.svg";
+  @property({ type : String, attribute : "icon" }) icon = "stop.svg";
+  @property({ type : String, attribute : "label" }) label = "Stop";
   @property({ type : String, attribute : "loco-id" }) locoId = null;
 
   connectedCallback() {
     super.connectedCallback();
+    this.on = true;
+    this.registerServerEvent(EServerEvent.lc, res => this.handleLocoEvent(res, e => this.onServerEvent(e)));
+  }
+
+  onServerEvent(e : RocrailEventLc): void {    
+    super.disabled = e.lc.V === 0;
   }
     
-  render() {
-    return html`<div class="btn-container">
-                <div class="btn icon off" style="-webkit-mask: url(${this.iconSetRoot}/${this.icon}) no-repeat center; mask: url(${this.iconSetRoot}/${this.icon}) no-repeat center;" @click="${this.handleClick}"></div>
-            </div>`;
-  }
-
   handleClick() {  
-    this.sendCommnd();
+    rocwct.send(`<lc id="${this.locoId}" V="0" controlcode="" slavecode="" />`);    
   }
 
-  sendCommnd() {
-    rocwct.send(`<lc id="${this.locoId}" V="0" controlcode="" slavecode="" />`);    
+  render() {
+    return super.render();
+  }
+
+  protected onLocoIdChange(): void {
+    // trigger empty lc command results in statusinf for specific loco
+    rocwct.send(`<lc id="${this.locoId}"  />`);
   }
 
 }

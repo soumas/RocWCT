@@ -6,12 +6,28 @@
 	<script src="/js/rocwct-bundle.js" type="module"></script>
 	<style type="text/css">
 		.container {
-			width: 48px;
-			height: 48px;
+			height: 50px;
+		}
+		.bttn {
+			float:left;
+			height:50px;
+			width: 33%;
+			min-width: 50px;
 		}
 	</style>
 </head>
 <body>
+	<table style="width:20%" border="1">
+		<tr>
+			<td >
+				<div class="bttn"><auto-switch></auto-switch></div>
+				<div class="bttn"><auto-switch label="My Label"></auto-switch></div>
+				<div class="bttn"><auto-switch hide-label></auto-switch></div>
+				<div class="bttn"><auto-switch disabled></auto-switch></div>
+				<div class="bttn"><auto-switch icon="lens.svg"></auto-switch></div>
+			</td>
+		</tr>
+	</table>
 	<table border="1">
 		<tr>
 			<td>Component</td>
@@ -24,12 +40,19 @@
 			<td>
 				<rcp-tester></rcp-tester>
 			</td>
-		</tr>		
+		</tr>	
+		<tr>
+				<td>auto-switch</td>
+				<td></td>
+				<td>
+						<auto-switch></auto-switch>
+				</td>
+		</tr>	
 		<tr>
 			<td>loco-auto-switch</td>
 			<td></td>
 			<td>
-				<div class="container"><loco-auto-switch loco-id="LOK2"></loco-auto-switch></div>				
+				<div class="container"><loco-auto-switch loco-id="LOK2" activate-global-auto start-stop-loco></loco-auto-switch></div>				
 			</td>
 		</tr>	
 		<tr>
@@ -74,13 +97,6 @@
 				<td>
 					<div class="container"><power-switch></power-switch></div>
 				</td>
-		</tr>
-		<tr>
-				<td>auto-switch</td>
-				<td></td>
-				<td>
-					<div class="container"><auto-switch></auto-switch></div> 
-				</td>
 		</tr>		
 		<tr>
 			<td>loco-direction</td>
@@ -96,10 +112,10 @@
 			<td>loco-function</td>
 			<td></td>
 			<td>
-				<div class="container"><loco-function loco-id="LOK2" fn="f0"></loco-function></div>
+				<div class="container"><loco-function loco-id="LOK2" fn="f0" icon="whistle.svg"></loco-function></div>
 				<div class="container"><loco-function loco-id="LOK2" fn="f1"></loco-function></div>
 				<div class="container"><loco-function loco-id="LOK2" fn="f2"></loco-function></div>
-				<div class="container"><loco-function loco-id="LOK2" fn="f3"></loco-function></div>
+				<div class="container"><loco-function loco-id="LOK2" fn="f3" label="Das ist mir wurscht!"></loco-function></div>
 				<div class="container"><loco-function loco-id="LOK2" fn="f4"></loco-function></div>
 				<div class="container"><loco-function loco-id="LOK2" fn="f5"></loco-function></div>
 				<div class="container"><loco-function loco-id="LOK2" fn="f6"></loco-function></div>

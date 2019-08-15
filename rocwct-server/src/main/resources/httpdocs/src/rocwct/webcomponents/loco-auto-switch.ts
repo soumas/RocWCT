@@ -1,48 +1,35 @@
 import { html, customElement, css, property } from 'lit-element';
-import { RocWctLitElement, EServerEvent, RocrailEventLc, RocrailEventAuto }  from '../base/rocwct-lib';
+import { EServerEvent, RocrailEventLc, RocrailEventAuto, RocWctLocoDependentButton }  from '../base/rocwct-lib';
 import * as rocwct from '../rocwct';
 
 @customElement('loco-auto-switch')
-export class LocoAutoSwitch extends RocWctLitElement {
+export class LocoAutoSwitch extends RocWctLocoDependentButton {
 
   static get styles() {
     return [ 
-      RocWctLitElement.baseStyles,
-      css`.btn { height: 75%; }`,
-      css`.lbl { height: 25%; overflow:hidden; width:100%; text-align: center; }`,
+      RocWctLocoDependentButton.stylesRocWctLocoDependentButton
     ]
    ;
   }
 
   @property({ type : String, attribute : "loco-id" }) locoId = null;
+  @property({ type : String })  icon = "play.svg";
+  @property({ type : String })  label = "Lok-Auto";
   @property({ type : Boolean, attribute : "activate-global-auto" }) activateGlobalAuto = false;
   @property({ type : Boolean, attribute : "start-stop-loco" }) startStopLoco = false;
-  @property({ type : String })  icon = "auto-mode.svg";
-  @property({ type : Boolean })  locoIsManual = null;
 
   connectedCallback() {
     super.connectedCallback();
-    this.registerServerEvent(EServerEvent.lc, res => this.onServerEventLoco(res));
+    this.registerServerEvent(EServerEvent.lc, res => this.handleLocoEvent(res, e => this.onServerEventLoco(e)));
     this.registerServerEvent(EServerEvent.auto, res => this.onServerEventAuto(res));
-  }
-    
-  render() {
-    return html`${this.locoIsManual != null
-      ? html`<div class="btn-container">
-                <div class="btn icon ${(this.locoIsManual === true) ? "off" : "on"}" style="-webkit-mask: url(${this.iconSetRoot}/${this.icon}) no-repeat center; mask: url(${this.iconSetRoot}/${this.icon}) no-repeat center;" @click="${this.handleClick}"></div>
-            </div>`
-      : html``
-    }`;
-  }
-
-  updated(changedProperties : Map<string,any>) {
-    if(changedProperties.has('locoId')) {
-      this.sendInitCommand();
-    }
   }
 
   handleClick() {  
     this.sendDirCmd();
+  }
+
+  protected onLocoIdChange(): void {
+    this.sendInitCommand();
   }
 
   sendInitCommand() {        
@@ -51,14 +38,11 @@ export class LocoAutoSwitch extends RocWctLitElement {
   }  
 
   onServerEventLoco(event:RocrailEventLc) {
-    if(event.lc.id !== this.locoId) {
-      return;
-    }
-    this.locoIsManual = event.lc.manual;
+    this.on = !event.lc.manual;
   }
 
   onServerEventAuto(event:RocrailEventAuto) {
-    // if global auto mode gos to 'off' and attrStartStopLoco is true, the loco auto mode should go to manual and stop
+    // if global auto mode goes to 'off' and attrStartStopLoco is true, the loco auto mode should go to manual and stop
     if(event.auto.cmd !== "on" && this.startStopLoco === true) {
       rocwct.send(`<lc id="${this.locoId}" cmd="setmanualmode" controlcode="" slavecode="" />`); 
       rocwct.send(`<lc id="${this.locoId}" cmd="stop" controlcode="" slavecode="" />`); 
@@ -67,7 +51,7 @@ export class LocoAutoSwitch extends RocWctLitElement {
 
   sendDirCmd() : void {
     let doActivateAutoMode : Boolean = false;
-    if(this.locoIsManual === true) {
+    if(this.on === false) {
       doActivateAutoMode = true;
     } else {
       doActivateAutoMode = false;

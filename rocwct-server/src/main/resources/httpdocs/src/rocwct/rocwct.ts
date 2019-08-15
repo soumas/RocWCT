@@ -12,7 +12,13 @@ function init() {
 }
 
 function initWebSocket() {
-    socket = new WebSocket("ws://localhost:8053");
+
+    let socketPort = new URL(document.URL).searchParams.get("port");
+    if(!socketPort) {
+        socketPort = "8053";
+    }
+
+    socket = new WebSocket("ws://"+ location.hostname + ":"+socketPort);
     socket.onopen = function() {
         log("websocket connection is open");
     };

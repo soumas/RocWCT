@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="utf-8" />
-	<title>RocWCT - Easy Cab One</title>
+	<title>RocWCT - Easy MoBa One</title>
 	<link rel="icon" href="/favicon.ico" >
 	<link rel="stylesheet" type="text/css" href="style.css?v=3">
 </head>
@@ -14,26 +14,26 @@
 	<table id="controlbar"> 
 		<tr>
 			<td style="height:100px;width:50px;padding-left: 10px;">
-				<loco-direction class="lococontrol" direction="backward"></loco-direction>
+				<loco-direction class="lococontrol" direction="backward" hide-label></loco-direction>
 			</td>
 			<td style="height:100px;width:200px;">
-				<loco-display class="lococontrol" id="myBtn" style="cursor: pointer" show-description="false"></loco-display>
+				<loco-display class="lococontrol" id="dlgBttn" style="cursor: pointer" show-description="false"></loco-display>
 			</td>
 			<td style="height:100px;width:50px;">
-				<loco-direction class="lococontrol" direction="forward"></loco-direction>
+				<loco-direction class="lococontrol" direction="forward" hide-label></loco-direction>
 			</td>
 			<td style="padding-left:40px;padding-right:30px;">
 				<loco-throttle class="lococontrol"></loco-throttle>
 			</td>
 			<td style="height:100px;width:50px;padding-right:30px;">
-				<loco-function class="lococontrol" fn="f0" show-label="false"></loco-function>
+				<loco-function class="lococontrol" fn="f0" ></loco-function>
 			</td>
 			<td style="height:100px;width:50px;padding-right:30px;">
-				<loco-auto-switch class="lococontrol" activate-global-auto="true" start-stop-loco="true"></loco-auto-switch>
+				<loco-auto-switch class="lococontrol" activate-global-auto start-stop-loco></loco-auto-switch>
 			</td>
 		</tr>
 	</table>
-	<div id="myModal" class="modal">
+	<div id="modal" class="modal">
 		<div class="modal-content">
 			<p>
 				<loco-chooser id="chooser"></loco-chooser>
