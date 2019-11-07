@@ -8,7 +8,7 @@ export class LocoThrottle extends RocWctLocoDependentElement {
   static get styles() {
     return [
       RocWctLocoDependentElement.stylesRocWctLocoDependentElement,
-      css`input[type="button"] { cursor:pointer; width:100%; height: 100%; border: none; text-align: center; }`,
+      css`input[type="button"] { cursor:pointer; width:100%; height: 100%; border: none; text-align: center; background-color: #7E888A; }`,
       css`input[type="button"].on { background-color: #FCAE01;}`,
       css`	
       .slider {
@@ -81,19 +81,19 @@ export class LocoThrottle extends RocWctLocoDependentElement {
         <input type="range" min="0" step="1" max="${this.sliderMax}" .value="${this.vCurrent}" @change="${(e) => this.sendCommnd(e.target.value)}" class="slider" > 			  
         <div class="control-container">
           <div class="control-box">
-            <input @click="${() => this.sendCommnd(0)}" class="${this.vCurrent <= 0 ? 'on' : ''}" title="Stop" type="button" style="-webkit-mask: url(/images/iconset-default/stop.svg) no-repeat center; mask: url(/images/iconset-default/stop.svg) no-repeat center;" />            
+            <input type="button" @click="${() => this.sendCommnd(0)}" class="${this.vCurrent <= 0 ? 'on' : ''}" title="Stop" type="button" style="-webkit-mask: url(/images/iconset-default/stop.svg) no-repeat center; mask: url(/images/iconset-default/stop.svg) no-repeat center;" />            
           </div>	
           <div class="control-box">
-            <input @click="${() => this.sendCommnd(this.vMin)}" class="${this.vCurrent > 0 && this.vCurrent <= this.vMin ? 'on' : ''}" title="Vmin" type="button" style="-webkit-mask: url(/images/iconset-default/gauge_0.svg) no-repeat center; mask: url(/images/iconset-default/gauge_0.svg) no-repeat center;" />
+            <input type="button" @click="${() => this.sendCommnd(this.vMin)}" class="${this.vCurrent > 0 && this.vCurrent <= this.vMin ? 'on' : ''}" title="Vmin" type="button" style="-webkit-mask: url(/images/iconset-default/gauge_0.svg) no-repeat center; mask: url(/images/iconset-default/gauge_0.svg) no-repeat center;" />
           </div>							  
           <div class="control-box">
-            <input @click="${() => this.sendCommnd(this.vMid)}" class="${this.vCurrent > this.vMin && this.vCurrent < this.vCru ? 'on' : ''}" title="Vmid" type="button" style="-webkit-mask: url(/images/iconset-default/gauge_1.svg) no-repeat center; mask: url(/images/iconset-default/gauge_1.svg) no-repeat center;" />
+            <input type="button" @click="${() => this.sendCommnd(this.vMid)}" class="${this.vCurrent > this.vMin && this.vCurrent < this.vCru ? 'on' : ''}" title="Vmid" type="button" style="-webkit-mask: url(/images/iconset-default/gauge_1.svg) no-repeat center; mask: url(/images/iconset-default/gauge_1.svg) no-repeat center;" />
           </div>					  
           <div class="control-box">
-            <input @click="${() => this.sendCommnd(this.vCru)}" class="${this.vCurrent >= this.vCru && this.vCurrent < this.vMax ? 'on' : ''}" title="Vcruise" type="button" style="-webkit-mask: url(/images/iconset-default/gauge_2.svg) no-repeat center; mask: url(/images/iconset-default/gauge_2.svg) no-repeat center;" />
+            <input type="button" @click="${() => this.sendCommnd(this.vCru)}" class="${this.vCurrent >= this.vCru && this.vCurrent < this.vMax ? 'on' : ''}" title="Vcruise" type="button" style="-webkit-mask: url(/images/iconset-default/gauge_2.svg) no-repeat center; mask: url(/images/iconset-default/gauge_2.svg) no-repeat center;" />
           </div>					  
           <div class="control-box">
-            <input @click="${() => this.sendCommnd(this.vMax)}" class="${this.vCurrent >= this.vMax ? 'on' : ''}" title="Vmax" type="button" style="-webkit-mask: url(/images/iconset-default/gauge_3.svg) no-repeat center; mask: url(/images/iconset-default/gauge_3.svg) no-repeat center;" />
+            <input type="button" @click="${() => this.sendCommnd(this.vMax)}" class="${this.vCurrent >= this.vMax ? 'on' : ''}" title="Vmax" type="button" style="-webkit-mask: url(/images/iconset-default/gauge_3.svg) no-repeat center; mask: url(/images/iconset-default/gauge_3.svg) no-repeat center;" />
           </div>
         </div>`
         : html``

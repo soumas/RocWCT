@@ -58,7 +58,7 @@ export abstract class RocWctButton extends RocWctLitElement {
     static get stylesRocWctButton() {
         return [ 
           RocWctLitElement.stylesRocWctLitElement,
-          css`input[type="button"] { cursor:pointer; width:100%; height: 70%; border: none; text-align: center; }`,
+          css`input[type="button"] { cursor:pointer;  width:100%; height: 70%; border: none; text-align: center; background-color: #7E888A;}`,
           css`input[type="button"] + div { width:100%; min-height: 30%; text-align: center; cursor:pointer; }`,
           css`input[type="button"].on { background-color: #FCAE01; }`,
           css`input[type="button"]:active { -webkit-transform: scale(0.94); transform: scale(0.94); }`,

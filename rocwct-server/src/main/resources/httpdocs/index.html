@@ -2,11 +2,41 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>RocWCT is running</title>
+<title>RocWCT</title>
 </head>
 <body>
-	<h1>RocWCT is running - congratulations!</h1><br/>
-	<a href="ui/easymoba1/index.html">Easy MoBa One</a><br/>
-	<a href="ui/dev/index.html">Control Overview (just for development)</a><br/>
+	<h1>RocWCT</h1>
+	<p>
+		Herzlich Willkommen auf der Startseite des RocWCT Servers!<br/>
+		Folgend finden Sie eine Liste der verf&uuml;gbaren Bedienoberfl&auml;chen.
+	</p>
+	<h2>Easy MoBa One (<a href="https://rocwct.soumasoft.com/easy-moba-one/" target="_blank">zur Beschreibung</a>)</h2>
+	<p>
+		Um einen Link f&uuml;r Easy MoBa One zu generieren, geben Sie bitte die URL von Rocweb an (Standardwert: http://localhost:8088).<br/>
+		<strong>URL Rocweb:</strong> <input type="text" id="easymobarocweburlinput" value="" placeholder="http://localhost:8088" /><br>
+		<strong>Easy MoBa One &ouml;ffnen:</strong> <a id="easymobylink" href="ui/easymoba1/index.html" target="_blank">ui/easymoba1/index.html</a><br/>
+	</p>
+	<br/><br/><br/><hr/>
+	<h3>Sonstige Links</h3>
+	<a href="ui/dev/index.html" target="_blank">Web Components Overview (developer only)</a><br/>
+	<a href="https://rocwct.soumasoft.com/" target="_blank">https://rocwct.soumasoft.com/</a><br/>
+	<a href="https://github.com/soumas/RocWCT" target="_blank">https://github.com/soumas/RocWCT</a><br/>
+
+	<script>
+		var easymobabaselink = "ui/easymoba1/index.html";
+		var easymobylink = document.getElementById("easymobylink");
+		var easymobarocweburlinput = document.getElementById("easymobarocweburlinput");
+		document.addEventListener("DOMContentLoaded", function() {
+			easymobarocweburlinput.addEventListener("keyup", function() {
+				if(easymobarocweburlinput.value) {
+					easymobylink.setAttribute("href", easymobabaselink+"?rocweb="+easymobarocweburlinput.value);
+					easymobylink.innerHTML = easymobabaselink+"?rocweb="+easymobarocweburlinput.value;
+				} else {
+					easymobylink.setAttribute("href", easymobabaselink);					
+					easymobylink.innerHTML = easymobabaselink;
+				}
+			});
+		});
+	</script>
 </body>
 </html>
