@@ -12,6 +12,14 @@ import com.soumasoft.rocwct.server.itc.AbstractRocWctTask;
  */
 public class RocWctWebSocketTask extends AbstractRocWctTask {
 	
+	/**
+	 * Time in ms to wait for graceful shutdown of the task.
+	 */
+	private static final int SHUTDOWN_TIMEOUT = 1000;
+	
+	/**
+	 * The WebSocket instance.
+	 */
 	private final RocWctWebSocket webSocket = new RocWctWebSocket();
 	
 	@Override	
@@ -22,7 +30,7 @@ public class RocWctWebSocketTask extends AbstractRocWctTask {
 	@Override
 	protected void onShutdown() throws IOException, InterruptedException {
 		/* stop websocket */
-		webSocket.stop(1000);		
+		webSocket.stop(SHUTDOWN_TIMEOUT);		
 	}
 	
 	public void broadcast(String msg) {

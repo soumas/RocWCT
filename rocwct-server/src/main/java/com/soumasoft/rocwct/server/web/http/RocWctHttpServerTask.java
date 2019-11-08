@@ -20,6 +20,11 @@ import lombok.extern.log4j.Log4j2;
 public class RocWctHttpServerTask extends AbstractRocWctTask {
 
 	/**
+	 * Time in ms to wait for graceful shutdown of the task.
+	 */
+	private static final int SHUTDOWN_TIMEOUT = 1000;	
+	
+	/**
 	 * The socket.
 	 */
 	private ServerSocket httpServerConnect;
@@ -71,7 +76,7 @@ public class RocWctHttpServerTask extends AbstractRocWctTask {
 		/* closing the socket results in an IOException */
 		httpServerConnect.close();
 		/* wait till thread has finished */
-		worker.join(1000);		
+		worker.join(SHUTDOWN_TIMEOUT);		
 	}
 
 }

@@ -22,6 +22,11 @@ import lombok.extern.log4j.Log4j2;
 public class RocrailSocketTask extends AbstractRocWctTask {
 	
 	/**
+	 * Time in ms to wait for graceful shutdown of the task.
+	 */
+	private static final int SHUTDOWN_TIMEOUT = 1000;	
+	
+	/**
 	 * Flag to decide whether an IOException was expected to be thrown (shutdown)
 	 */
 	@Getter
@@ -104,11 +109,11 @@ public class RocrailSocketTask extends AbstractRocWctTask {
 			socket.close();
 		}
 		if(reader != null) {
-			reader.join(1000);
+			reader.join(SHUTDOWN_TIMEOUT);
 		}
 		if(writer != null) {
 			enqueueRocrailCommand(ShutdownHelper.SHUTDOWNCOMMAND);
-			writer.join(1000);
+			writer.join(SHUTDOWN_TIMEOUT);
 		}
 	}
 

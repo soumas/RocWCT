@@ -91,10 +91,15 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
-							<artifactSet>
-								<excludes>
-								</excludes>
-							</artifactSet>
+							<minimizeJar>true</minimizeJar>
+							<filters>
+								<filter>
+									<artifact>*:*</artifact>
+									<excludes>
+										<exclude>httpdocs/**</exclude>
+									</excludes>
+								</filter>
+							</filters>
 						</configuration>
 					</execution>
 				</executions>
