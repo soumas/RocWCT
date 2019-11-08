@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import org.json.XML;
 
 import com.soumasoft.rocwct.server.Taskmanager;
+import com.soumasoft.rocwct.server.util.ShutdownHelper;
 import com.soumasoft.rocwct.server.web.socket.RocWctWebSocketTask;
 
 import lombok.extern.log4j.Log4j2;
@@ -121,6 +122,12 @@ public class RocrailSocketReader implements Runnable {
 			} catch (Exception e) {
 				if (!task.isShutdownInProgress()) {
 					log.error("Unexpected Exception while reading from Rocrail server! Try to reconnect...");
+					
+					// force the writer-thread to shutdown because rocrail is not connected anymore 
+					// (writer does not get informed about that by the socket, see https://github.com/soumas/RocWCT/issues/4) 
+					task.enqueueRocrailCommand(ShutdownHelper.SHUTDOWNCOMMAND);
+					
+					// restart establishing connection to rocrail server
 					task.setupRocrailConnectionAsync();
 				} 
 				break;
