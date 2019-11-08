@@ -63,6 +63,7 @@ export class LocoFunction extends RocWctLocoDependentButton {
     // search for fundef-element if icon or text not specified in attributes
     let fundefElem : Fundef = null;
     if(loco.fundef) {
+
       // select the fundef-element for current function the fundef node may be an 
       // instance of Fundef or an array (if multiple definitions are available)
       if(Array.isArray(loco.fundef)) {
@@ -71,17 +72,16 @@ export class LocoFunction extends RocWctLocoDependentButton {
             fundefElem = fndf;
           }
         });
-      } else {
+      } else if(this.extractFunctionNumber() === loco.fundef.fn){
         fundefElem = (loco.fundef);
       }
 
-      
       // set icon
       if(this.hasFixedIcon === false) {
         if(fundefElem !== null && fundefElem.icon && fundefElem.icon.length > 0) {
           this.icon = fundefElem.icon;
           if(this.attrIconExtension !== null) {
-            this.icon = this.icon + this.attrIconExtension;
+            this.icon = this.icon + "." + this.attrIconExtension;
           }
         } else {
           this.icon = this.defaultIcon;
@@ -96,7 +96,7 @@ export class LocoFunction extends RocWctLocoDependentButton {
           this.label = this.fn.toUpperCase();
         }          
       }
-    }  
+    }
   }
 
   onServerEvent(event : RocrailEventFn) {
