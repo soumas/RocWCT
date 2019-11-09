@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -72,18 +71,17 @@ public class InstallHelper {
 
 		while ((entry = zis.getNextEntry()) != null) {
 
-			String filepath = entry.getName();
+			File file = Paths.get(getBasePathForClass()).resolve(entry.getName()).toFile();
 
-			System.out.format("Copy file: %s", filepath);
+			System.out.format("Copy file: %s", file.getAbsolutePath());
 			System.out.println("");
 
-			Path filePath = Paths.get(getBasePathForClass()).resolve(filepath);
-
-			if (!filepath.contains(".")) {
-				filePath.toFile().mkdirs();
-			} else {
-				filePath.toFile().createNewFile();
-				try (FileOutputStream fos = new FileOutputStream(filePath.toFile());
+			if(file.isDirectory()) {
+				file.mkdirs();
+			} else {				
+				file.getParentFile().mkdirs();				
+				file.createNewFile();
+				try (FileOutputStream fos = new FileOutputStream(file);
 						BufferedOutputStream bos = new BufferedOutputStream(fos, buffer.length)) {
 
 					int len;
