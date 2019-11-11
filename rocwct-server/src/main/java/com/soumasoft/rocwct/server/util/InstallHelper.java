@@ -73,10 +73,10 @@ public class InstallHelper {
 
 			File file = Paths.get(getBasePathForClass()).resolve(entry.getName()).toFile();
 
-			System.out.format("Copy file: %s", file.getAbsolutePath());
+			System.out.format("copy file: %s", file.getAbsolutePath());
 			System.out.println("");
 
-			if(file.isDirectory()) {
+			if(!file.getAbsolutePath().contains(".")) {
 				file.mkdirs();
 			} else {				
 				file.getParentFile().mkdirs();				
