@@ -61,6 +61,11 @@ public class RocrailSocketReader implements Runnable {
 				reader.read(currentChar);
 				inBuffer.append(currentChar[0]);
 				
+				// when rocrail sever closes the socket, the reader get's an endless amount of blanks
+				if(inBuffer.length() > 9999 && !inBuffer.toString().matches("[A-Za-z]{1,}")) {
+					throw new RuntimeException("Rocrail socket seems to have no good data for RocWCT server. The socket may be blind... try to reconnect!");
+				}
+				
 				// if inBuffer contains '</xmlh>' the header is complete (currentChar[0] == '>' is just for better performance)
 				if (currentChar[0] == '>' && inBuffer.indexOf("</xmlh>") > 0) {
 					
@@ -121,7 +126,9 @@ public class RocrailSocketReader implements Runnable {
 				
 			} catch (Exception e) {
 				if (!task.isShutdownInProgress()) {
-					log.error("Unexpected Exception while reading from Rocrail server! Try to reconnect...");
+					log.error("Unexpected Exception while reading from Rocrail server!");
+					log.error(e);
+					log.error("Try to reconnect...");
 					
 					// force the writer-thread to shutdown because rocrail is not connected anymore 
 					// (writer does not get informed about that by the socket, see https://github.com/soumas/RocWCT/issues/4) 

@@ -19,12 +19,17 @@ export abstract class RocWctLitElement extends LitElement {
         super();
     }
 
-    registerServerEvent(event : EServerEvent, serverEventHandler? : IServerEventCallback) {
+    registerServerEvent(event : EServerEvent, serverEventHandler? : IServerEventCallback) : ServerEventSubscription{
         let evnt : ServerEventSubscription = new ServerEventSubscription();
         evnt.element = this;
         evnt.event = event;
         evnt.onServerEvent = serverEventHandler;
         rocwct.subscribe(evnt);
+        return evnt;
+      }
+
+      unregisterServerEvent(event: ServerEventSubscription) : void {
+          rocwct.unsubscribe(event);
       }
 }
 
@@ -129,6 +134,10 @@ export interface ILocoEventCallback  {
 /***********************************************************/
 export enum EVMode {
     percent, kmh
+}
+
+export enum LoggingLevel {
+    trace, debug, info, warn, error
 }
 
 

@@ -2,6 +2,8 @@ package com.soumasoft.rocwct.server.web.socket;
 
 import java.io.IOException;
 
+import org.json.JSONObject;
+
 import com.soumasoft.rocwct.server.itc.AbstractRocWctTask;
 
 /**
@@ -36,6 +38,12 @@ public class RocWctWebSocketTask extends AbstractRocWctTask {
 	public void broadcast(String msg) {
 		if(webSocket != null) {
 			webSocket.broadcast(msg);
+		}
+	}
+	
+	public void broadcast(RocWctClientNotification msg) {
+		if(webSocket != null) {			
+			webSocket.broadcast(new JSONObject(msg).toString());
 		}
 	}
 }
