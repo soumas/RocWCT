@@ -15,142 +15,159 @@
 			min-width: 50px;
 		}
 	</style>
+	<script>
+		document.addEventListener("DOMContentLoaded", function (event) {
+			document.getElementById("chooser").addEventListener("onLocoChange", (e) => {
+				var lococontrols = document.querySelectorAll('[loco-id]');
+				for (var i = 0; i < lococontrols.length; i++) {
+					lococontrols.item(i).setAttribute('loco-id', e.detail.locoid);
+				}
+			});
+		});	
+	</script>
 </head>
 <body>
-	<table style="width:20%" border="1">
-		<tr>
-			<td >
-				<div class="bttn"><auto-switch></auto-switch></div>
-				<div class="bttn"><auto-switch label="My Label"></auto-switch></div>
-				<div class="bttn"><auto-switch hide-label></auto-switch></div>
-				<div class="bttn"><auto-switch disabled></auto-switch></div>
-				<div class="bttn"><auto-switch icon="lens.svg"></auto-switch></div>
-			</td>
-		</tr>
-	</table>
+	<h1>RocWCT Web Components</h1>
+	<p>
+		Dies ist ein &Uuml;bersicht aller Web Components zu Testzweicken (f&uuml;r RocWCT-Entwickler).
+	</p>
+	<h2>Globale Steuerung</h2>
+	<table border="1">
+			<tr>
+				<td>Component</td>
+				<td>Demo</td>
+				<td>Beschreibung</td>
+			</tr>	
+			<tr>
+					<td>power-switch</td>
+					<td>
+						<div class="container"><power-switch></power-switch></div>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+						<td>auto-switch</td>
+						<td>
+							<div class="container"><auto-switch></auto-switch></div>
+						</td>
+						<td></td>
+				</tr>
+	</table>	
+	<h2>Lok Steuerung</h2>
 	<table border="1">
 		<tr>
 			<td>Component</td>
-			<td>Attributes</td>
 			<td>Demo</td>
-		</tr>		
-		<tr>
-			<td>rcp-tester</td>
-			<td></td>
-			<td>
-				<rcp-tester></rcp-tester>
-			</td>
-		</tr>	
-		<tr>
-				<td>auto-switch</td>
-				<td></td>
-				<td>
-						<auto-switch></auto-switch>
-				</td>
-		</tr>	
-		<tr>
-			<td>loco-auto-switch</td>
-			<td></td>
-			<td>
-				<div class="container"><loco-auto-switch loco-id="BR103" activate-global-auto start-stop-loco></loco-auto-switch></div>				
-			</td>
-		</tr>	
+			<td>Beschreibung</td>
+		</tr>
 		<tr>
 			<td>loco-chooser</td>
-			<td></td>
 			<td>
 				<div style="min-height:50px;">
-					<loco-chooser></loco-chooser>
-				</div>
+						<loco-chooser id="chooser"></loco-chooser>
+					</div>
+				</td>
+				<td></td>
+		</tr>		
+		<tr>
+			<td>loco-auto-switch</td>
+			<td>
+				<div class="container"><loco-auto-switch loco-id="" activate-global-auto start-stop-loco></loco-auto-switch></div>				
 			</td>
+			<td></td>
 		</tr>		
 		<tr>
 			<td>loco-display</td>
-			<td></td>
 			<td>
 				<div style="min-height:50px;">
-					<loco-display loco-id="BR103"></loco-display>
-				</div>
-			</td>
+						<loco-display loco-id=""></loco-display>
+					</div>
+				</td>
+				<td></td>
 		</tr>		
 		<tr>
 			<td>loco-stop</td>
-			<td></td>
 			<td>
-				<div class="container"><loco-stop loco-id="BR103" ></loco-stop></div>
+				<div class="container"><loco-stop loco-id="" ></loco-stop></div>
 			</td>
+			<td></td>
 		</tr>
 		<tr>
 			<td>loco-throttle</td>
-			<td></td>
 			<td>
 				<div style="min-height:50px;">
-					<loco-throttle loco-id="NS2418" ></loco-throttle><br/>
-					<loco-throttle loco-id="BR103" ></loco-throttle><br/>
-					<loco-throttle loco-id="Taurus" ></loco-throttle><br/>
-				</div>
-			</td>
-		</tr>
-		<tr>
-				<td>power-switch</td>
-				<td></td>
-				<td>
-					<div class="container"><power-switch></power-switch></div>
+						<loco-throttle loco-id="" ></loco-throttle><br/>
+					</div>
 				</td>
-		</tr>		
+				<td></td>
+			</tr>		
 		<tr>
 			<td>loco-direction</td>
 			<td>
+				<div class="container"><loco-direction loco-id=""  direction="forward"></loco-direction></div><br/>		
+				<div class="container"><loco-direction loco-id="" ></loco-direction></div><br/>
+				<div class="container"><loco-direction loco-id="" direction="backward"></loco-direction><div><br/>
 			</td>
 			<td>
-				<div class="container"><loco-direction loco-id="BR103"  direction="forward"></loco-direction></div><br/>		
-				<div class="container"><loco-direction loco-id="BR103" ></loco-direction></div><br/>
-				<div class="container"><loco-direction loco-id="BR103" direction="backward"></loco-direction><div><br/>
 			</td>
 		</tr>
 		<tr>
 			<td>loco-function</td>
-			<td></td>
 			<td>
-				<div class="container"><loco-function loco-id="BR103" fn="f0"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f1"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f2"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f3"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f4"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f5"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f6"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f7"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f8"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f9"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f10"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f11"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f12"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f13"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f14"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f0"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f1"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f2"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f3"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f4"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f5"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f6"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f7"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f8"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f9"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f10"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f11"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f12"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f13"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f14"></loco-function></div>
 				<hr>
-				<div class="container"><loco-function loco-id="BR103" fn="f15"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f16"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f17"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f18"></loco-function></div>		
-				<div class="container"><loco-function loco-id="BR103" fn="f19"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f20"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f21"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f22"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f23"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f24"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f25"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f26"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f27"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f28"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f15"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f16"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f17"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f18"></loco-function></div>		
+				<div class="container"><loco-function loco-id="" fn="f19"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f20"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f21"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f22"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f23"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f24"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f25"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f26"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f27"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f28"></loco-function></div>
 				<hr/>
-				<div class="container"><loco-function loco-id="BR103" fn="f29"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f30"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f31"></loco-function></div>
-				<div class="container"><loco-function loco-id="BR103" fn="f32"></loco-function></div> 
+				<div class="container"><loco-function loco-id="" fn="f29"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f30"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f31"></loco-function></div>
+				<div class="container"><loco-function loco-id="" fn="f32"></loco-function></div> 
 			</td>
-		</tr>
+			<td></td>
+		</tr>		
 
 	</table>
-
+	<h2>Sonstige Controls</h2>
+	<table border="1">
+		<tr>
+			<td>Component</td>
+			<td>Demo</td>
+			<td>Beschreibung</td>
+		</tr>	
+		<tr>
+			<td>rcp-tester</td>			
+			<td>
+				<rcp-tester></rcp-tester>
+			</td>
+			<td></td>
+		</tr>
+	</table>
 </body>
 </html>

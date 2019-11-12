@@ -49,12 +49,12 @@ function initWebSocket() {
 }
 
 export function unsubscribe(subscribtion : ServerEventSubscription) {
-    // TODO
-    //let unsubcr = subscribtion;
-    //subscribtions = subscribtions.filter(function(elem:ServerEventSubscription ) {
-        //return elem.element !== unsubcr.element || elem.event !== unsubcr.event || elem.id !== unsubcr.id;
-    //});
-    
+    let unsubcr = subscribtion;
+    subscribtions = subscribtions.filter(function(elem:ServerEventSubscription ) {
+        return elem.element !== unsubcr.element 
+            || elem.event !== unsubcr.event 
+            || elem.id !== unsubcr.id;
+    });
 }
 
 export function subscribe(subscribtion : ServerEventSubscription) {
