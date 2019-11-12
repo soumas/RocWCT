@@ -98,17 +98,17 @@ public class RocrailSocketTask extends AbstractRocWctTask {
 
 				} catch (Exception e) {
 					// log the error
-					log.error(String.format("Cannot connect to Rocrail server at %s:%d. Retry to connect in 15 seconds...",Properties.getRocrailHostname(), Properties.getRocrailPort()), e);
+					log.error(String.format("Cannot connect to Rocrail server at %s:%d. Retry to connect in 5 seconds...",Properties.getRocrailHostname(), Properties.getRocrailPort()), e);
 					
 					// inform clients about the problem
 					Taskmanager.getTask(RocWctWebSocketTask.class).broadcast(
 							new RocWctClientNotification(
 								LoggingLevel.error, 
-								String.format("RocWCT Server cannot connect to rocrail Server @ %s:%d. Please recheck config and make sure that rocrail is running. Server will retry to connect in about 15 Seconds.", Properties.getRocrailHostname(), Properties.getRocrailPort())));
+								String.format("RocWCT Server cannot connect to rocrail Server @ %s:%d. Please recheck config and make sure that rocrail is running. Server will retry to connect in about 5 Seconds.", Properties.getRocrailHostname(), Properties.getRocrailPort())));
 					
 					// wait 15 seconds
 					try {
-						for(int i = 0; i<15; i++) {
+						for(int i = 0; i<5; i++) {
 							Thread.sleep(1000);
 							if(shutdownInProgress) {
 								break;
