@@ -1,5 +1,5 @@
 import { html, customElement, css, property } from 'lit-element';
-import { RocWctLocoDependentButton, EServerEvent, RocrailEventFn, Lc, Fundef, RocrailEventLc }  from '../base/rocwct-lib';
+import { RocWctLocoDependentButton, EServerEvent, RocrailEventFn, Lc, Fundef, RocrailEventLc, ServerEventSubscription }  from '../base/rocwct-lib';
 import * as rocwct from '../rocwct';
 
 @customElement('loco-function')
@@ -21,16 +21,17 @@ export class LocoFunction extends RocWctLocoDependentButton {
   defaultIcon : string = "lens.svg";
   hasFixedIcon : Boolean = false;
   hasfixedLabel : Boolean = false;
+  subscribtion : ServerEventSubscription = null;
   
   connectedCallback() {
     super.connectedCallback();
     this.hasfixedLabel = this.label !== null && this.label.length > 0;
     this.hasFixedIcon = this.icon !== null && this.icon.length > 0;
     this.registerServerEvent(EServerEvent.fn, res => this.onServerEvent(res));
-    this.registerServerEvent(EServerEvent.lc, res => this.handleLocoEvent(res, e => this.onInitialServerEvent(e)));    
   }
-    
+  
   protected onLocoIdChange(): void {
+    this.subscribtion = this.registerServerEvent(EServerEvent.lc, res => this.handleLocoEvent(res, e => this.onInitialServerEvent(e)));    
     rocwct.send(`<model cmd="lcprops" />`); 
   }
   
@@ -46,7 +47,6 @@ export class LocoFunction extends RocWctLocoDependentButton {
     if(loco.id !== this.locoId) {
       return;
     }
-
     // on/off state
     let funcOn : boolean = false;
     let myPos : number =  this.extractFunctionNumber();
@@ -96,7 +96,11 @@ export class LocoFunction extends RocWctLocoDependentButton {
           this.label = this.fn.toUpperCase();
         }          
       }
+    } else {
+      this.label = this.fn;
+      this.icon = this.defaultIcon;
     }
+    this.unregisterServerEvent(this.subscribtion);
   }
 
   onServerEvent(event : RocrailEventFn) {
