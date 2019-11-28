@@ -1,0 +1,28 @@
+{
+  "name": "rocwct-plugin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "rocwct-plugin.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc && webpack --config webpack.config.js",
+    "pack": "webpack --config webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "RocWCT"
+  },
+  "author": "Thomas Juen, SoumaSoft",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^3.4.2",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
+  },
+  "dependencies": {
+    "lit-element": "^2.1.0"
+  }
+}
