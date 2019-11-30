@@ -3,10 +3,18 @@
 	<head>
 		<meta charset="ISO-8859-1">
 		<title>RocWCT Plugin</title>
-		<script src="./js/rocwct-plugin.js"></script>
+		<script src="./js/rocwct-plugin.js" type="module"></script>
+		<script>
+			window.onload = function () {
+				initRocWCT({
+					throttleid: "the-cool-throttle"
+				});
+			}
+		</script>
 	</head>
 	<body>
 		<h1>RocWCT Plugin</h1>
 		<h2><test-component ></test-component></h2>
 	</body>
+		
 </html>

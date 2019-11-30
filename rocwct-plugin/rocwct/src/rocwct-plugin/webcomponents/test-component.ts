@@ -5,7 +5,7 @@ export class TestComponent extends LitElement {
 
      // This decorator creates a property accessor that triggers rendering and
       // an observed attribute.
-      @property() mood = 'very great';
+      @property() mood = 'great';
  
       static styles = css`
         span {

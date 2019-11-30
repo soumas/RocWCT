@@ -1,37 +1,44 @@
+import { RocWCT } from '../rocwct';
+import { Utils } from './utils';
+
 export enum LoggingLevel {
-    trace, debug, info, warn, error 
+    trace, debug, info, warn, error
 }
+
 export class Logger {
 
-    static loggingLevel : LoggingLevel = LoggingLevel.info;
-    
-    static setLoggingLevel(level : LoggingLevel) {
-        Logger.loggingLevel = level;
+    public error(data: any) {
+        if (Utils.nullOrUndefined(RocWCT.config.getLoggingLevel())
+            || RocWCT.config.getLoggingLevel() <= LoggingLevel.error) {
+            console.error(data);
+        }
     }
 
-    static error(data : any) {    
-        if(Logger.loggingLevel <= LoggingLevel.error) {
-            console.error(data);
-        }    
-    }
-    static warn(data : any) {    
-        if(Logger.loggingLevel <= LoggingLevel.warn) {
+    public warn(data: any) {
+        if (Utils.nullOrUndefined(RocWCT.config.getLoggingLevel())
+            || RocWCT.config.getLoggingLevel() <= LoggingLevel.warn) {
             console.warn(data);
-        }    
+        }
     }
-    static info(data : any) {    
-        if(Logger.loggingLevel <= LoggingLevel.info) {
+
+    public info(data: any) {
+        if (Utils.nullOrUndefined(RocWCT.config.getLoggingLevel()) 
+            || RocWCT.config.getLoggingLevel() <= LoggingLevel.info) {
             console.info(data);
-        }    
+        }
     }
-    static debug(data : any) {    
-        if(Logger.loggingLevel <= LoggingLevel.debug) {
+
+    public debug(data: any) {
+        if (Utils.nullOrUndefined(RocWCT.config.getLoggingLevel()) 
+            || RocWCT.config.getLoggingLevel() <= LoggingLevel.debug) {
             console.log(data);
-        }    
+        }
     }
-    static trace(data : any) {    
-        if(Logger.loggingLevel <= LoggingLevel.trace) {
+
+    public trace(data: any) {
+        if (Utils.nullOrUndefined(RocWCT.config.getLoggingLevel()) 
+            || RocWCT.config.getLoggingLevel() <= LoggingLevel.trace) {
             console.log(data);
-        }    
+        }
     }
 }

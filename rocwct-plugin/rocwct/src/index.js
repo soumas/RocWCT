@@ -1,6 +1,9 @@
-/* loader */
-import './tsc_out/rocwct'
+/* main */
+import './rwct/rocwct'
 /* lib */
-import './tsc_out/lib/logger'
+import './rwct/lib/utils'
+import './rwct/lib/config'
+import './rwct/lib/logger'
+import './rwct/lib/socket'
 /* components */
-import './tsc_out/webcomponents/test-component';
+import './rwct/webcomponents/test-component';

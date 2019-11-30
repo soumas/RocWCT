@@ -1,14 +1,23 @@
-import {Logger, LoggingLevel} from './lib/logger';
+import { Config, ConfigContainer } from './lib/config';
+import { Socket } from './lib/socket';
+import { Logger } from './lib/logger';
 
-window.onload = function() {
-    init();
+export class RocWCT {
+
+    public static config : Config = new Config();
+    public static logger : Logger = new Logger();
+    public static socket : Socket = new Socket();    
+
+    public static init(cfg : ConfigContainer) {
+        RocWCT.config.init(cfg);
+        RocWCT.socket.init();
+        RocWCT.socket.sendCmd(`<sys cmd="getstate"/>`);
+    }
+
 }
 
-function init() {
-    Logger.setLoggingLevel(LoggingLevel.debug);
-    Logger.trace("trace");
-    Logger.debug("debug");
-    Logger.info("info");
-    Logger.warn("Warn");
-    Logger.error("Error");
+/* export method initRocWCT() - and only this
+method - to the world outside our module */
+globalThis.initRocWCT = function (cfg : ConfigContainer) {
+    RocWCT.init(cfg);
 }
