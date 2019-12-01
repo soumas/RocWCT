@@ -1,43 +1,24 @@
 import { RocWCT } from '../rocwct';
 import { Utils } from './utils';
-import { LoggingLevel, Logger } from './logger';
+import { LoggingLevel } from './logger';
 
-export class Config {
+/**
+ * container class for basic settings
+ * note that only string representation is supported for this container
+ * class. converting to real type is the job of the Config-class.
+ */
+export class ConfigContainer {
+    controlcode: string;
+    slavecode: string;
+    throttleid: string;
+    loggingLevel: string;
+}
+
+/**
+ * this class is responsible for basic configurations.
+ */
+export class Config extends ConfigContainer {
     
-    private controlcode: string;
-    private slavecode: string;
-    private throttleid: string;   
-    private loggingLevel : string;
-
-    public init(cfg : ConfigContainer) : void {
-        
-        RocWCT.logger.info("loading configuration...");
-
-        this.initByCfgOrDefaults(cfg);
-        this.initByUrlParams();
-
-        RocWCT.logger.info("configuration loaded");
-        RocWCT.logger.debug(this);
-    }
-
-    private initByCfgOrDefaults(cfg : ConfigContainer) {
-        if(Utils.nullOrUndefined(cfg)) {
-            cfg = new ConfigContainer();
-        }        
-        this.controlcode = !Utils.nullOrUndefined(cfg.controlcode) ? cfg.controlcode : "";
-        this.slavecode = !Utils.nullOrUndefined(cfg.slavecode) ? cfg.slavecode : "";
-        this.throttleid = !Utils.nullOrUndefined(cfg.throttleid) ? cfg.throttleid : "rocwct";
-        this.loggingLevel = !Utils.nullOrUndefined(cfg.loggingLevel) ? cfg.loggingLevel : "info";
-    }
-
-    private initByUrlParams() {
-        Object.keys(this).forEach((key: string) => {
-            if(!Utils.nullOrUndefined(Utils.getUrlParam(key))) {
-                this[key] = Utils.getUrlParam(key);
-            }
-        });
-    }
-
     // public getter
     public getControlcode() : string {
         return this.controlcode;
@@ -51,12 +32,56 @@ export class Config {
     public getLoggingLevel() : LoggingLevel {
         return LoggingLevel[this.loggingLevel];
     }
-    
-}
 
-export class ConfigContainer {
-    controlcode: string;
-    slavecode: string;
-    throttleid: string;
-    loggingLevel: string;
+    public init(cfg : ConfigContainer) : void {
+        
+        RocWCT.logger.info("loading configuration...");
+
+        /* apply lowest level: default values */
+        this.initDefaultValues();
+        /* overrule default values by config-obj (provided by initRocWCT() call) */
+        this.initByConfigObj(cfg);
+        /* overrule config values by url params */
+        this.initByUrlParams();
+
+        RocWCT.logger.info("configuration loaded");
+        RocWCT.logger.debug(this);
+    }
+
+    /**
+     * apply available default value for ech property 
+     */
+    private initDefaultValues() {
+        this.loggingLevel = "info";
+        this.controlcode = "";
+        this.slavecode = "";
+        this.throttleid = "rocweb";
+    }
+
+    /**
+     * apply available value from cfg-object for ech property 
+     */
+    private initByConfigObj(cfg : ConfigContainer) {
+        if(Utils.nullOrUndefined(cfg)) {
+            cfg = new ConfigContainer();
+        }        
+        Object.keys(this).forEach((key: string) => {
+            if(!Utils.nullOrUndefined(cfg[key])) {
+                this[key] = cfg[key];
+            }
+        });
+    }
+
+    /**
+     * apply available value from url-param for ech property 
+     */
+    private initByUrlParams() {
+        Object.keys(this).forEach((key: string) => {
+            if(!Utils.nullOrUndefined(Utils.getUrlParam(key))) {
+                this[key] = Utils.getUrlParam(key);
+            }
+        });
+    }
+
+    
 }

@@ -1,5 +1,9 @@
 import { RocWCT } from '../rocwct';
 
+/**
+ * this class manages the connection between 
+ * RocWCT user interface and rocrail server.
+ */
 export class Socket {
 
     private socket: WebSocket;
@@ -8,6 +12,9 @@ export class Socket {
         this.initSocket();
     }
 
+    /**
+     * starts the socket and registers event listeners
+     */
     private initSocket() {
 
         RocWCT.logger.info("initializing websocket...");
@@ -19,26 +26,43 @@ export class Socket {
         this.socket.onclose = (e) => { this.handleClose(e); };
     }
 
-    /* WebSocket Event handler */
+    /**
+     * handles WebSocket's open event
+     */
     private handleOpen(event:Event) {
         RocWCT.logger.info("connection to rocrail established");
     }
 
+    /**
+     * handles WebSocket's error event
+     */
     private handleError(event:Event) {
         RocWCT.logger.error(event.type);
         this.reconnect();
     }
+    
+    /**
+     * handles WebSocket's close event
+     */
     private handleClose(event:Event) {
         RocWCT.logger.info("connection closed");
         this.reconnect();
     }
 
+    /**
+     * handles WebSocket's message event
+     */
     private handleMessage(event:MessageEvent) {
         RocWCT.logger.trace(`<<< incoming message`);
         RocWCT.logger.trace(event.data);
+        // todo --> parse and inform controls
     }    
 
-    /* helper methods */
+    /**
+     * sends the rcp command to the rocrail server
+     * if socket is not yet ready, the method will wait for it
+     * @param cmd 
+     */
     public async sendCmd(cmd : string) {
 
         if(this.socket == null || this.socket.readyState !==  WebSocket.OPEN) {
@@ -53,6 +77,9 @@ export class Socket {
         this.socket.send(cmd);
     }
 
+    /**
+     * reconnects if necessary
+     */
     private reconnect() {
         if(this.socket.readyState === WebSocket.CLOSED || this.socket.readyState === WebSocket.CLOSING) {
             RocWCT.logger.info("try to reconnect...");
@@ -60,6 +87,9 @@ export class Socket {
         }
     }
 
+    /**
+     * builds the WebSocket url to connect to
+     */
     private buildWsUrl() {
         let protocol = (location.protocol == "https:") ? "wss" : "ws";
         let host = location.hostname.replace("www.", "");

@@ -2,6 +2,10 @@ import { Config, ConfigContainer } from './lib/config';
 import { Socket } from './lib/socket';
 import { Logger } from './lib/logger';
 
+/**
+ * The 'static' class RocWCT is the entrypoint and the central
+ * controller for a single instance of a RocWCT user interface. 
+ */
 export class RocWCT {
 
     public static config : Config = new Config();
@@ -16,8 +20,9 @@ export class RocWCT {
 
 }
 
-/* export method initRocWCT() - and only this
-method - to the world outside our module */
+/**
+ * global init-method (has to be called by the host ui)
+ */
 globalThis.initRocWCT = function (cfg : ConfigContainer) {
     RocWCT.init(cfg);
 }

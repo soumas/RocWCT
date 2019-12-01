@@ -1,10 +1,17 @@
 import { RocWCT } from '../rocwct';
 import { Utils } from './utils';
 
+/**
+ * supported logging level (ordered list)
+ */
 export enum LoggingLevel {
     trace, debug, info, warn, error
 }
 
+/**
+ * the logger is responsible for logging everything
+ * currently only output to the browser's console is supported
+ */
 export class Logger {
 
     public error(data: any) {
