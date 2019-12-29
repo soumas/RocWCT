@@ -1,5 +1,5 @@
 import { html, customElement, css } from 'lit-element';
-import { RocWctLitElement } from './base/rocwct-litelement';
+import { RocWctLitElement } from './base/rocwct-lib';
 import { RocWCT } from '../rocwct';
 
 @customElement('rcp-tester')

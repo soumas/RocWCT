@@ -1,6 +1,6 @@
 import { RocWCT } from '../rocwct';
 import { xml2js } from 'xml-js';
-import { ServerEventSubscription } from '../webcomponents/base/servereventsubscription';
+import { ServerEventSubscription } from '../webcomponents/base/rocwct-lib';
 
 /**
  * this class routes messages from the rocrail 
