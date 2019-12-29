@@ -8,8 +8,13 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc && webpack --config webpack.config.js",
-    "pack": "webpack --config webpack.config.js"
+    "pack": "webpack --config webpack.config.js",
+    "zip": "cd ./releases && del current.zip && cd .. && 7z a -y -xr!src ./releases/current.zip ../../",
+    "build": "tsc && npm run pack && npm run zip",
+    "install": "7z x -y -oC:\\Users\\thomas\\AppData\\Local\\Programs\\Rocrail\\web ./releases/current.zip",
+    "unpublish": "rmdir /S /Q C:\\Users\\thomas\\AppData\\Local\\Programs\\Rocrail\\web\\rocwct\\",
+    "publish": "npm run unpublish && npm run install",
+    "deploy": "npm run build && npm run publish"
   },
   "repository": {
     "type": "git",
