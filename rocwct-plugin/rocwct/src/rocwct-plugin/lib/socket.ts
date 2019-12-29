@@ -55,7 +55,7 @@ export class Socket {
     private handleMessage(event:MessageEvent) {
         RocWCT.logger.trace(`<<< incoming message`);
         RocWCT.logger.trace(event.data);
-        // todo --> parse and inform controls
+        RocWCT.router.in(event.data);
     }    
 
     /**
@@ -63,7 +63,7 @@ export class Socket {
      * if socket is not yet ready, the method will wait for it
      * @param cmd 
      */
-    public async sendCmd(cmd : string) {
+    public async send(cmd : string) {
 
         if(this.socket == null || this.socket.readyState !==  WebSocket.OPEN) {
             RocWCT.logger.debug(`socket is currently not ready for communication. waiting for better times...`);

@@ -6,4 +6,4 @@ import './rwct/lib/config'
 import './rwct/lib/logger'
 import './rwct/lib/socket'
 /* components */
-import './rwct/webcomponents/test-component';
+import './rwct/webcomponents/rcp-tester';

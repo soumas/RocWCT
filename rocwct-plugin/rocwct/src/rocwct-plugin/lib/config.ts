@@ -55,7 +55,7 @@ export class Config extends ConfigContainer {
         this.loggingLevel = "info";
         this.controlcode = "";
         this.slavecode = "";
-        this.throttleid = "rocweb";
+        this.throttleid = "rocwct";
     }
 
     /**

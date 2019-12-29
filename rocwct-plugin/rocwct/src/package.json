@@ -23,6 +23,7 @@
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
-    "lit-element": "^2.1.0"
+    "lit-element": "^2.1.0",
+    "xml-js": "^1.6.11"
   }
 }
